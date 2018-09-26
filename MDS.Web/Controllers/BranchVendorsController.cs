@@ -14,9 +14,17 @@ namespace MDS.Web.Controllers
         // GET: BranchVendors
         public ActionResult Index()
         {
-            var branchVendor = (from vc in db.VendorCompanies
-                               join vm in db.VendorImages on vc.VendorCompanyId equals vm.VendorCompanyId select new BranchVendor { VendorCompanyId = vc.VendorCompanyId, Name = vc.Name, ImageName = vm.ImageName, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription, Email = vc.Email, Mobile = vc.Mobile, Country = vc.Country, State = vc.State, City = vc.City, Street = vc.Street, ZIPCode = vc.ZIPCode, AddressLine1 = vc.AddressLine1, AddressLine2 = vc.AddressLine2 });
-                             
+            //var vendorId = (int)System.Web.HttpContext.Current.Session["vendorid"];
+            //Vendor vendor = db.Vendors.Find(vendorId);
+            //var vendorName = vendor.FirstName;
+
+            var branchVendor = (from vc in db.VendorCompanies  
+                                join v in db.Vendors on vc.VendorId equals v.VendorId
+                               join vm in db.VendorImages on vc.VendorCompanyId equals vm.VendorCompanyId
+                               select new BranchVendor { VendorCompanyId = vc.VendorCompanyId, VendorName=v.FirstName, Name = vc.Name, ImageName = vm.ImageName, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription, Email = vc.Email, Mobile = vc.Mobile, Country = vc.Country, State = vc.State, City = vc.City, Street = vc.Street, ZIPCode = vc.ZIPCode, AddressLine1 = vc.AddressLine1, AddressLine2 = vc.AddressLine2 } );
+
+            
+
             return View(branchVendor.ToList());
         }
         [HttpGet]

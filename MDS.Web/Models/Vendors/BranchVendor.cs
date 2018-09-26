@@ -21,6 +21,7 @@ namespace MDS.Web.Models.Vendors
 
         [Display(Name="Branch Name")]
         public string Name { get; set; }
+        public string VendorName { get; set; }
 
         [Display(Name = "Branch Helpline")]
         public string Mobile { get; set; }

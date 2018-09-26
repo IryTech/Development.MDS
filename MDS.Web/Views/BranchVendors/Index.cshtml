@@ -15,6 +15,9 @@
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.VendorName)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Mobile)
         </th>
         <th>
@@ -28,9 +31,12 @@
 
 @foreach (var item in Model) {
     <tr>
-        
+
         <td>
             @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VendorName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Mobile)
@@ -43,8 +49,9 @@
         <td>
             @Html.DisplayFor(modelItem => item.AddressLine1)
         </td>
-        
+
         <td>
+            @Html.ActionLink("Add Branch", "Create", "BranchVendors", new { id = item.VendorCompanyId }) |
             @Html.ActionLink("Add Course", "Edit", new { id = item.VendorCompanyId }) |
             @Html.ActionLink("Area Cover", "Details", new { id = item.VendorCompanyId }) |
             @Html.ActionLink("Add BankDetails", "Delete", new { id = item.VendorCompanyId })
