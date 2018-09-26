@@ -1,0 +1,62 @@
+﻿@model IEnumerable<MDS.Web.Models.Vendors.BranchVendor>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Mobile)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AddressLine1)
+        </th>
+        <th>Actions</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Mobile)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.City)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.AddressLine1)
+        </td>
+        
+        <td>
+            @Html.ActionLink("Add Course", "Edit", new { id = item.VendorCompanyId }) |
+            @Html.ActionLink("Area Cover", "Details", new { id = item.VendorCompanyId }) |
+            @Html.ActionLink("Add BankDetails", "Delete", new { id = item.VendorCompanyId })
+        </td>
+    </tr>
+    <tr >
+        <td style=" border-top:none;" colspan="5">
+            @Html.ActionLink("Edit", "Edit", new { id = item.VendorCompanyId }) |
+            @Html.ActionLink("Details", "Details", new { id = item.VendorCompanyId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.VendorCompanyId })
+        </td>
+    </tr>
+}
+
+</table>
