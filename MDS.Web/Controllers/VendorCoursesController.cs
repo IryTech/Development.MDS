@@ -18,99 +18,110 @@ namespace MDS.Web.Controllers
         // GET: VendorCourses
         public ActionResult Index()
         {
-            var vendorCourses = db.VendorCourses.Include(v => v.VendorCompany);
+            var vendorCourses = from vc in db.VendorCourses select new CourseVendor {VendorCourseId=vc.VendorCourseId, VendorCompanyId=vc.VendorCompanyId,CourseTitle=vc.CourseTitle,Duration=vc.Duration,VendorPrice=vc.VendorPrice,ShortDescription=vc.ShortDescription, LongDescription=vc.LongDescription,Title=vc.Title,YourUrl=vc.YourUrl};
             return View(vendorCourses.ToList());
         }
 
-        // GET: VendorCourses/Details/5
+        [HttpGet]
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VendorCourse vendorCourse = db.VendorCourses.Find(id);
-            if (vendorCourse == null)
+            var vendorCourses = (from vc in db.VendorCourses select new CourseVendor { VendorCourseId = vc.VendorCourseId, CourseTitle = vc.CourseTitle, Duration = vc.Duration, VendorPrice = vc.VendorPrice, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription, Title = vc.Title, YourUrl = vc.YourUrl }).SingleOrDefault();
+            if (vendorCourses == null)
             {
                 return HttpNotFound();
             }
-            return View(vendorCourse);
+            return View(vendorCourses);
         }
 
-        // GET: VendorCourses/Create
+        [HttpGet]
         public ActionResult Create()
         {
-            ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name");
+            //ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name");
             return View();
         }
 
-        // POST: VendorCourses/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "VendorCourseId,VendorCompanyId,CourseTitle,ShortDescription,LongDescription,Duration,VendorPrice,Title,YourUrl,CreatedBy,CreatedOn,UpdatedBy,UpdatedOn")] VendorCourse vendorCourse)
+        public ActionResult Create([Bind(Include = "VendorCourseId,VendorCompanyId,CourseTitle,ShortDescription,LongDescription,Duration,VendorPrice,Title,YourUrl,CreatedBy,CreatedOn,UpdatedBy,UpdatedOn")] CourseVendor courseVendor)
         {
             if (ModelState.IsValid)
             {
+                VendorCourse vendorCourse = new VendorCourse()
+                {
+                    VendorCompanyId = (int)System.Web.HttpContext.Current.Session["VendorCompanyId"],
+                    CourseTitle = courseVendor.CourseTitle,
+                    Duration = courseVendor.Duration,
+                    VendorPrice=courseVendor.VendorPrice,
+                    ShortDescription=courseVendor.ShortDescription,
+                    LongDescription=courseVendor.LongDescription,
+                    Title=courseVendor.Title,
+                    YourUrl=courseVendor.YourUrl
+                };
+
                 db.VendorCourses.Add(vendorCourse);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name", vendorCourse.VendorCompanyId);
-            return View(vendorCourse);
+            //ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name", vendorCourse.VendorCompanyId);
+            return View(courseVendor);
         }
 
-        // GET: VendorCourses/Edit/5
+        [HttpGet]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VendorCourse vendorCourse = db.VendorCourses.Find(id);
-            if (vendorCourse == null)
+            var vendorCourses = (from vc in db.VendorCourses select new CourseVendor { VendorCourseId = vc.VendorCourseId, VendorCompanyId = vc.VendorCompanyId, CourseTitle = vc.CourseTitle, Duration = vc.Duration, VendorPrice = vc.VendorPrice, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription, Title = vc.Title, YourUrl = vc.YourUrl }).SingleOrDefault();
+            if (vendorCourses == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name", vendorCourse.VendorCompanyId);
-            return View(vendorCourse);
+           // ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name", vendorCourse.VendorCompanyId);
+            return View(vendorCourses);
         }
 
-        // POST: VendorCourses/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "VendorCourseId,VendorCompanyId,CourseTitle,ShortDescription,LongDescription,Duration,VendorPrice,Title,YourUrl,CreatedBy,CreatedOn,UpdatedBy,UpdatedOn")] VendorCourse vendorCourse)
+        public ActionResult Edit([Bind(Include = "VendorCourseId,VendorCompanyId,CourseTitle,ShortDescription,LongDescription,Duration,VendorPrice,Title,YourUrl,CreatedBy,CreatedOn,UpdatedBy,UpdatedOn")] CourseVendor courseVendor,int id)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(vendorCourse).State = EntityState.Modified;
+                VendorCourse vendorCourse = db.VendorCourses.Find(id);
+                vendorCourse.CourseTitle = courseVendor.CourseTitle;
+                vendorCourse.Duration = courseVendor.Duration;
+                vendorCourse.VendorPrice = courseVendor.VendorPrice;
+                vendorCourse.Title = courseVendor.Title;
+                vendorCourse.YourUrl = courseVendor.YourUrl;
+                db.Entry(vendorCourse).State = EntityState.Modified; 
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name", vendorCourse.VendorCompanyId);
-            return View(vendorCourse);
+           // ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name", vendorCourse.VendorCompanyId);
+            return View(courseVendor);
         }
 
-        // GET: VendorCourses/Delete/5
+       [HttpGet]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VendorCourse vendorCourse = db.VendorCourses.Find(id);
-            if (vendorCourse == null)
+            var vendorCourses = (from vc in db.VendorCourses select new CourseVendor { VendorCourseId = vc.VendorCourseId, VendorCompanyId = vc.VendorCompanyId, CourseTitle = vc.CourseTitle, Duration = vc.Duration, VendorPrice = vc.VendorPrice, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription, Title = vc.Title, YourUrl = vc.YourUrl }).SingleOrDefault();
+            if (vendorCourses == null)
             {
                 return HttpNotFound();
             }
-            return View(vendorCourse);
+            return View(vendorCourses);
         }
 
-        // POST: VendorCourses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
