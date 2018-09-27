@@ -212,6 +212,8 @@
     <Content Include="Views\RegisterVendors\Index.cshtml" />
     <Content Include="Views\BranchVendors\Create.cshtml" />
     <Content Include="Views\BranchVendors\Index.cshtml" />
+    <Content Include="Views\BranchVendors\Details.cshtml" />
+    <Content Include="Views\BranchVendors\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

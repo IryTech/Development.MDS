@@ -76,6 +76,7 @@ namespace MDS.Web.Controllers
         {
             if (id == null)
             {
+
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var registerVendor = (from item in db.Vendors

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MDS.Core;
@@ -21,7 +23,10 @@ namespace MDS.Web.Controllers
             var branchVendor = (from vc in db.VendorCompanies  
                                 join v in db.Vendors on vc.VendorId equals v.VendorId
                                join vm in db.VendorImages on vc.VendorCompanyId equals vm.VendorCompanyId
-                               select new BranchVendor { VendorCompanyId = vc.VendorCompanyId, VendorName=v.FirstName, Name = vc.Name, ImageName = vm.ImageName, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription, Email = vc.Email, Mobile = vc.Mobile, Country = vc.Country, State = vc.State, City = vc.City, Street = vc.Street, ZIPCode = vc.ZIPCode, AddressLine1 = vc.AddressLine1, AddressLine2 = vc.AddressLine2 } );
+                               select new BranchVendor { VendorCompanyId = vc.VendorCompanyId, VendorName=v.FirstName,
+                               Name = vc.Name, ImageName = vm.ImageName, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription,
+                               Email = vc.Email, Mobile = vc.Mobile, Country = vc.Country, State = vc.State, City = vc.City, Street = vc.Street,
+                               ZIPCode = vc.ZIPCode, AddressLine1 = vc.AddressLine1, AddressLine2 = vc.AddressLine2 } );
 
             
 
@@ -54,7 +59,7 @@ namespace MDS.Web.Controllers
                     ZIPCode=branchVendor.ZIPCode,
                     AddressLine1=branchVendor.AddressLine1,
                     AddressLine2=branchVendor.AddressLine2,
-                    CreatedOn=DateTime.Now                   
+                   // CreatedOn=DateTime.Now                   
                 };                
                 //db.VendorCompanies.Add(vendorCompany);
                // db.SaveChanges();
@@ -72,6 +77,94 @@ namespace MDS.Web.Controllers
                 db.SaveChanges();
             }
             return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public ActionResult Details(int? id)
+       {
+            if(id==null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var branchDetail = (from vc in db.VendorCompanies
+                                join vm in db.VendorImages on vc.VendorCompanyId equals vm.VendorCompanyId
+                                where vc.VendorCompanyId == id
+                                select new BranchVendor
+                                {
+                                    Name = vc.Name,
+                                    Mobile = vc.Mobile,
+                                    Email = vc.Email,
+                                    Country = vc.Country,
+                                    State = vc.State,
+                                    City = vc.City,
+                                    Street = vc.Street,
+                                    ZIPCode = vc.ZIPCode,
+                                    AddressLine1 = vc.AddressLine1,
+                                    AddressLine2 = vc.AddressLine2,
+                                    ShortDescription = vc.ShortDescription,
+                                    LongDescription = vc.LongDescription,
+                                    ImageName = vm.ImageName,
+                                }).SingleOrDefault();
+            return View(branchDetail);
+        }
+        [HttpGet]
+        public ActionResult Edit(int? id)
+        {
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var branchVendor = (from vc in db.VendorCompanies
+                                join vm in db.VendorImages on vc.VendorCompanyId equals vm.VendorCompanyId
+                                where vc.VendorCompanyId == id
+                                select new BranchVendor
+                                {
+                                    Name = vc.Name,
+                                    Mobile = vc.Mobile,
+                                    Email = vc.Email,
+                                    Country = vc.Country,
+                                    State = vc.State,
+                                    City = vc.City,
+                                    Street = vc.Street,
+                                    ZIPCode = vc.ZIPCode,
+                                    AddressLine1 = vc.AddressLine1,
+                                    AddressLine2 = vc.AddressLine2,
+                                    ShortDescription = vc.ShortDescription,
+                                    LongDescription = vc.LongDescription,
+                                    ImageName = vm.ImageName,
+                                }).SingleOrDefault();
+            if (branchVendor== null)
+            {
+                return HttpNotFound();
+            }
+            return View(branchVendor);
+        }
+        [HttpPost]
+        public ActionResult Edit(BranchVendor branchVendor ,int id)
+        {
+            if (ModelState.IsValid)
+            {
+                VendorCompany vc   = db.VendorCompanies.Find(id);
+                branchVendor.Name = vc.Name;
+                branchVendor.Mobile = vc.Mobile;
+                branchVendor.Email = vc.Email;
+                branchVendor.Country = vc.Country;
+                branchVendor.State = vc.State;
+                branchVendor.City = vc.City;
+                branchVendor.Street = vc.Street;
+                branchVendor.ZIPCode = vc.ZIPCode;
+                branchVendor.AddressLine1 = vc.AddressLine1;
+                branchVendor.AddressLine2 = vc.AddressLine2;
+                branchVendor.ShortDescription = vc.ShortDescription;
+                branchVendor.LongDescription = vc.LongDescription;                  
+                db.Entry(vc).State = EntityState.Modified;
+                VendorImage vendorImage = db.VendorImages.Find(id);
+                branchVendor.ImageName = vendorImage.ImageName;
+                db.Entry(vendorImage).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(branchVendor);
         }
 
     }

@@ -27,7 +27,7 @@ namespace MDS.Core
 
         public int? CreatedBy { get; set; }
 
-        public DateTime? CreatOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
 
         public int? UpdatedBy { get; set; }
 
