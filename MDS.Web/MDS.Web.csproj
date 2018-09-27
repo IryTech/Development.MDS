@@ -153,6 +153,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AreaCoversController.cs" />
+    <Compile Include="Controllers\BankDetailsController.cs" />
     <Compile Include="Controllers\BranchVendorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RegisterVendorsController.cs" />
@@ -214,6 +216,16 @@
     <Content Include="Views\BranchVendors\Index.cshtml" />
     <Content Include="Views\BranchVendors\Details.cshtml" />
     <Content Include="Views\BranchVendors\Edit.cshtml" />
+    <Content Include="Views\BankDetails\Create.cshtml" />
+    <Content Include="Views\BankDetails\Delete.cshtml" />
+    <Content Include="Views\BankDetails\Details.cshtml" />
+    <Content Include="Views\BankDetails\Edit.cshtml" />
+    <Content Include="Views\BankDetails\Index.cshtml" />
+    <Content Include="Views\AreaCovers\Create.cshtml" />
+    <Content Include="Views\AreaCovers\Delete.cshtml" />
+    <Content Include="Views\AreaCovers\Details.cshtml" />
+    <Content Include="Views\AreaCovers\Edit.cshtml" />
+    <Content Include="Views\AreaCovers\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

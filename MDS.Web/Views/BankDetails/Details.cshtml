@@ -1,0 +1,50 @@
+﻿@model  MDS.Web.Models.Vendors.BankDetailsVendor
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>BankDetail</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BankName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BankName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AccountHolderName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AccountHolderName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AccountNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AccountNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IFSC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IFSC)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.BankDetailsId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

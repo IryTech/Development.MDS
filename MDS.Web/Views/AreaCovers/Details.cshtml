@@ -1,0 +1,52 @@
+﻿@model MDS.Web.Models.Vendors.AreaVendor
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>AreaCover</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.AreaName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AreaName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PopularName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PopularName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.YourUrl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.YourUrl)
+        </dd>
+
+       
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.AreaCoverId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<MDS.Web.Models.Vendors.AreaVendor>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AreaName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PopularName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.YourUrl)
+        </th>
+        <th>Action</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AreaName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PopularName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.YourUrl)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.AreaCoverId }) |
+            @Html.ActionLink("Details", "Details", new { id = item.AreaCoverId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.AreaCoverId })
+        </td>
+    </tr>
+}
+
+</table>

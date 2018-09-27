@@ -1,0 +1,55 @@
+﻿@model IEnumerable<MDS.Web.Models.Vendors.BankDetailsVendor>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.BankName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountHolderName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountNumber)
+        </th>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.IFSC)
+        </th>
+
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.BankName)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountHolderName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IFSC)
+        </td>
+
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.BankDetailsId }) |
+            @Html.ActionLink("Details", "Details", new { id = item.BankDetailsId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.BankDetailsId })
+        </td>
+    </tr>
+}
+
+</table>

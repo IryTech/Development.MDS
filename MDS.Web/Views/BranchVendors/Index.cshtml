@@ -52,12 +52,12 @@
 
         <td>
             @Html.ActionLink("Add Branch", "Create", "BranchVendors", new { id = item.VendorCompanyId }) |
-            @Html.ActionLink("Add Course", "Edit", new { id = item.VendorCompanyId }) |
-            @Html.ActionLink("Area Cover", "Details", new { id = item.VendorCompanyId }) |
-            @Html.ActionLink("Add BankDetails", "Delete", new { id = item.VendorCompanyId })
+            @Html.ActionLink("Add Course", "Create","VendorCourses", new { id = item.VendorCompanyId }) |
+            @Html.ActionLink("Area Cover", "Create","AreaCovers") |
+            @Html.ActionLink("Add BankDetails","Create","BankDetails")
         </td>
     </tr>
-    <tr >
+    <tr > 
         <td style=" border-top:none;" colspan="5">
             @Html.ActionLink("Edit", "Edit", new { id = item.VendorCompanyId }) |
             @Html.ActionLink("Details", "Details", new { id = item.VendorCompanyId }) |

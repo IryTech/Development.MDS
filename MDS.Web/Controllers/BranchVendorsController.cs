@@ -75,6 +75,7 @@ namespace MDS.Web.Controllers
                 };
                 db.VendorImages.Add(vendorImage);
                 db.SaveChanges();
+                Session["vendorBranchid"] = vendorCompany.VendorCompanyId;
             }
             return RedirectToAction("Index");
         }
