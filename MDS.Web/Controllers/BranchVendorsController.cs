@@ -39,8 +39,7 @@ namespace MDS.Web.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Create(BranchVendor branchVendor)
-           
+        public ActionResult Create(BranchVendor branchVendor)           
         {
             if(ModelState.IsValid)
             {
@@ -75,7 +74,7 @@ namespace MDS.Web.Controllers
                 };
                 db.VendorImages.Add(vendorImage);
                 db.SaveChanges();
-                Session["vendorBranchid"] = vendorCompany.VendorCompanyId;
+                Session["VendorCompanyId"] = vendorCompany.VendorCompanyId;
             }
             return RedirectToAction("Index");
         }
@@ -91,6 +90,7 @@ namespace MDS.Web.Controllers
                                 where vc.VendorCompanyId == id
                                 select new BranchVendor
                                 {
+                                    VendorCompanyId = vc.VendorCompanyId,
                                     Name = vc.Name,
                                     Mobile = vc.Mobile,
                                     Email = vc.Email,
@@ -145,28 +145,76 @@ namespace MDS.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                VendorCompany vc   = db.VendorCompanies.Find(id);
-                branchVendor.Name = vc.Name;
-                branchVendor.Mobile = vc.Mobile;
-                branchVendor.Email = vc.Email;
-                branchVendor.Country = vc.Country;
-                branchVendor.State = vc.State;
-                branchVendor.City = vc.City;
-                branchVendor.Street = vc.Street;
-                branchVendor.ZIPCode = vc.ZIPCode;
-                branchVendor.AddressLine1 = vc.AddressLine1;
-                branchVendor.AddressLine2 = vc.AddressLine2;
-                branchVendor.ShortDescription = vc.ShortDescription;
-                branchVendor.LongDescription = vc.LongDescription;                  
-                db.Entry(vc).State = EntityState.Modified;
+                VendorCompany vendorCompany   = db.VendorCompanies.Find(id);
+                vendorCompany.Name = branchVendor.Name;
+                vendorCompany.Mobile = branchVendor.Mobile;
+                vendorCompany.Email = branchVendor.Email;
+                vendorCompany.Country = branchVendor.Country;
+                vendorCompany.State = branchVendor.State;
+                vendorCompany.City = branchVendor.City;
+                vendorCompany.Street = branchVendor.Street;
+                vendorCompany.ZIPCode = branchVendor.ZIPCode;
+                vendorCompany.AddressLine1 = branchVendor.AddressLine1;
+                vendorCompany.AddressLine2 = branchVendor.AddressLine2;
+                vendorCompany.ShortDescription = branchVendor.ShortDescription;
+                vendorCompany.LongDescription = branchVendor.LongDescription;                  
+                db.Entry(vendorCompany).State = EntityState.Modified;
                 VendorImage vendorImage = db.VendorImages.Find(id);
-                branchVendor.ImageName = vendorImage.ImageName;
+                vendorImage.ImageName = branchVendor.ImageName;
                 db.Entry(vendorImage).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(branchVendor);
         }
+        [HttpGet]
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var branchVendor = (from vc in db.VendorCompanies
+                                join vm in db.VendorImages on vc.VendorCompanyId equals vm.VendorCompanyId
+                                where vc.VendorCompanyId == id
+                                select new BranchVendor
+                                {
+                                    VendorCompanyId=vc.VendorCompanyId,
+                                    Name = vc.Name,
+                                    Mobile = vc.Mobile,
+                                    Email = vc.Email,
+                                    Country = vc.Country,
+                                    State = vc.State,
+                                    City = vc.City,
+                                    Street = vc.Street,
+                                    ZIPCode = vc.ZIPCode,
+                                    AddressLine1 = vc.AddressLine1,
+                                    AddressLine2 = vc.AddressLine2,
+                                    ShortDescription = vc.ShortDescription,
+                                    LongDescription = vc.LongDescription,
+                                    ImageName = vm.ImageName,
+                                }).SingleOrDefault();
+
+            if (branchVendor == null)
+            {
+                return HttpNotFound();
+            }
+            return View(branchVendor);
+        }
+
+        // POST: Vendors/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            VendorCompany vendorCompany = db.VendorCompanies.Find(id);
+            db.VendorCompanies.Remove(vendorCompany);
+            VendorImage vendorImage = db.VendorImages.Find(id);
+            db.VendorImages.Remove(vendorImage);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        }
 
     }
-}

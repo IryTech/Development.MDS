@@ -17,7 +17,13 @@ namespace MDS.Web
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "RegisterVendors", action = "Index", id = UrlParameter.Optional }
-            );
+                );
+
+            routes.MapRoute(
+                name: "Course",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "VendorCourses", action = "Index", id = UrlParameter.Optional }
+                );
         }
     }
 }
