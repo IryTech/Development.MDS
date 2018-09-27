@@ -156,6 +156,7 @@
     <Compile Include="Controllers\BranchVendorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RegisterVendorsController.cs" />
+    <Compile Include="Controllers\VendorCoursesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -214,6 +215,12 @@
     <Content Include="Views\BranchVendors\Index.cshtml" />
     <Content Include="Views\BranchVendors\Details.cshtml" />
     <Content Include="Views\BranchVendors\Edit.cshtml" />
+    <Content Include="Views\BranchVendors\Delete.cshtml" />
+    <Content Include="Views\VendorCourses\Create.cshtml" />
+    <Content Include="Views\VendorCourses\Delete.cshtml" />
+    <Content Include="Views\VendorCourses\Details.cshtml" />
+    <Content Include="Views\VendorCourses\Edit.cshtml" />
+    <Content Include="Views\VendorCourses\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

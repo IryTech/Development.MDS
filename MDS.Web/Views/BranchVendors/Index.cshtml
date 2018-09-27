@@ -52,7 +52,7 @@
 
         <td>
             @Html.ActionLink("Add Branch", "Create", "BranchVendors", new { id = item.VendorCompanyId }) |
-            @Html.ActionLink("Add Course", "Edit", new { id = item.VendorCompanyId }) |
+            @Html.ActionLink("Add Course", "Create", "VendorCourses") |
             @Html.ActionLink("Area Cover", "Details", new { id = item.VendorCompanyId }) |
             @Html.ActionLink("Add BankDetails", "Delete", new { id = item.VendorCompanyId })
         </td>
