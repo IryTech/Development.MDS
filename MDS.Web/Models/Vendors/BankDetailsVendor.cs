@@ -9,7 +9,7 @@ namespace MDS.Web.Models.Vendors
     {
         public int BankDetailsId { get; set; }
 
-        public int VendorId { get; set; }
+        public int VendorCompanyId { get; set; }
 
         [Display(Name = "Bank Name")]
         public string BankName { get; set; }

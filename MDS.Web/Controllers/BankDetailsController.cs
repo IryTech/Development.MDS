@@ -41,7 +41,7 @@ namespace MDS.Web.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-           // ViewBag.VendorId = new SelectList(db.Vendors, "VendorId", "FirstName");
+            ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name");
             return View();
         }
 
@@ -56,7 +56,7 @@ namespace MDS.Web.Controllers
             {
                 BankDetail bankDetail = new BankDetail()
                 {
-                    VendorId = (int)System.Web.HttpContext.Current.Session["vendorid"],
+                    VendorCompanyId  = bankDetailsVendor.VendorCompanyId,
                     BankName=bankDetailsVendor.BankName,
                     AccountHolderName = bankDetailsVendor.AccountHolderName,
                     AccountNumber = bankDetailsVendor.AccountNumber,
@@ -67,7 +67,7 @@ namespace MDS.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            //ViewBag.VendorId = new SelectList(db.Vendors, "VendorId", "FirstName", bankDetail.VendorId);
+           // ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "FirstName", bankDetailsVendor.VendorCompanyId);
             return View(bankDetailsVendor);
         }
 

@@ -14,7 +14,7 @@ namespace MDS.Web.Controllers
     public class VendorCoursesController : Controller
     {
         private MdsDbContext db = new MdsDbContext();
-        int vendorCompanyId = (int) System.Web.HttpContext.Current.Session["VendorCompanyId"];
+      //  int vendorCompanyId = (int) System.Web.HttpContext.Current.Session["VendorCompanyId"];
         // GET: VendorCourses
         public ActionResult Index()
         {
@@ -29,7 +29,7 @@ namespace MDS.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var vendorCourses = (from vc in db.VendorCourses select new CourseVendor { VendorCourseId = vc.VendorCourseId, CourseTitle = vc.CourseTitle, Duration = vc.Duration, VendorPrice = vc.VendorPrice, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription, Title = vc.Title, YourUrl = vc.YourUrl }).SingleOrDefault();
+            var vendorCourses = (from vc in db.VendorCourses where vc.VendorCourseId == id select new CourseVendor { VendorCourseId = vc.VendorCourseId, CourseTitle = vc.CourseTitle, Duration = vc.Duration, VendorPrice = vc.VendorPrice, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription, Title = vc.Title, YourUrl = vc.YourUrl }).SingleOrDefault();
             if (vendorCourses == null)
             {
                 return HttpNotFound();
@@ -40,7 +40,7 @@ namespace MDS.Web.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            //ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name");
+            ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name");
             return View();
         }
 
@@ -48,11 +48,12 @@ namespace MDS.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "VendorCourseId,VendorCompanyId,CourseTitle,ShortDescription,LongDescription,Duration,VendorPrice,Title,YourUrl,CreatedBy,CreatedOn,UpdatedBy,UpdatedOn")] CourseVendor courseVendor)
         {
+            
             if (ModelState.IsValid)
             {
                 VendorCourse vendorCourse = new VendorCourse()
                 {
-                    VendorCompanyId = (int)System.Web.HttpContext.Current.Session["VendorCompanyId"],
+                    VendorCompanyId = courseVendor.VendorCompanyId,
                     CourseTitle = courseVendor.CourseTitle,
                     Duration = courseVendor.Duration,
                     VendorPrice=courseVendor.VendorPrice,
@@ -67,7 +68,7 @@ namespace MDS.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            //ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name", vendorCourse.VendorCompanyId);
+           // ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name", vendorCourse.VendorCompanyId);
             return View(courseVendor);
         }
 
@@ -78,7 +79,7 @@ namespace MDS.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var vendorCourses = (from vc in db.VendorCourses select new CourseVendor { VendorCourseId = vc.VendorCourseId, VendorCompanyId = vc.VendorCompanyId, CourseTitle = vc.CourseTitle, Duration = vc.Duration, VendorPrice = vc.VendorPrice, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription, Title = vc.Title, YourUrl = vc.YourUrl }).SingleOrDefault();
+            var vendorCourses = (from vc in db.VendorCourses where vc.VendorCourseId==id select new CourseVendor { VendorCourseId = vc.VendorCourseId, VendorCompanyId = vc.VendorCompanyId, CourseTitle = vc.CourseTitle, Duration = vc.Duration, VendorPrice = vc.VendorPrice, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription, Title = vc.Title, YourUrl = vc.YourUrl }).SingleOrDefault();
             if (vendorCourses == null)
             {
                 return HttpNotFound();
@@ -114,7 +115,7 @@ namespace MDS.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var vendorCourses = (from vc in db.VendorCourses select new CourseVendor { VendorCourseId = vc.VendorCourseId, VendorCompanyId = vc.VendorCompanyId, CourseTitle = vc.CourseTitle, Duration = vc.Duration, VendorPrice = vc.VendorPrice, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription, Title = vc.Title, YourUrl = vc.YourUrl }).SingleOrDefault();
+            var vendorCourses = (from vc in db.VendorCourses where vc.VendorCourseId == id select new CourseVendor { VendorCourseId = vc.VendorCourseId, VendorCompanyId = vc.VendorCompanyId, CourseTitle = vc.CourseTitle, Duration = vc.Duration, VendorPrice = vc.VendorPrice, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription, Title = vc.Title, YourUrl = vc.YourUrl }).SingleOrDefault();
             if (vendorCourses == null)
             {
                 return HttpNotFound();

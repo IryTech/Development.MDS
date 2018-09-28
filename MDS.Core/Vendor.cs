@@ -12,7 +12,6 @@ namespace MDS.Core
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Vendor()
         {
-            BankDetails = new HashSet<BankDetail>();
             SubscriptionTypes = new HashSet<SubscriptionType>();
             VendorCompanies = new HashSet<VendorCompany>();
             VendorImages = new HashSet<VendorImage>();
@@ -32,12 +31,10 @@ namespace MDS.Core
         [StringLength(20)]
         public string Mobile { get; set; }
 
-       
         [StringLength(100)]
         public string Password { get; set; }
 
         [StringLength(100)]
-        
         public string ConfirmPassword { get; set; }
 
         [StringLength(100)]
@@ -53,9 +50,6 @@ namespace MDS.Core
         public int? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BankDetail> BankDetails { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubscriptionType> SubscriptionTypes { get; set; }

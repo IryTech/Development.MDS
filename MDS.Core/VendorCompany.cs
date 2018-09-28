@@ -13,6 +13,7 @@ namespace MDS.Core
         public VendorCompany()
         {
             AreaCovers = new HashSet<AreaCover>();
+            BankDetails = new HashSet<BankDetail>();
             VendorCourses = new HashSet<VendorCourse>();
             VendorImages = new HashSet<VendorImage>();
         }
@@ -71,6 +72,9 @@ namespace MDS.Core
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AreaCover> AreaCovers { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BankDetail> BankDetails { get; set; }
 
         public virtual Vendor Vendor { get; set; }
 

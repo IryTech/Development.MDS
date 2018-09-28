@@ -11,7 +11,7 @@ namespace MDS.Core
         [Key]
         public int BankDetailsId { get; set; }
 
-        public int VendorId { get; set; }
+        public int VendorCompanyId { get; set; }
 
         [StringLength(30)]
         public string AccountHolderName { get; set; }
@@ -42,6 +42,6 @@ namespace MDS.Core
 
         public DateTime? UpdatedOn { get; set; }
 
-        public virtual Vendor Vendor { get; set; }
+        public virtual VendorCompany VendorCompany { get; set; }
     }
 }

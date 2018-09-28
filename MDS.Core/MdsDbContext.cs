@@ -195,11 +195,6 @@ namespace MDS.Core
                 .IsUnicode(false);
 
             modelBuilder.Entity<Vendor>()
-                .HasMany(e => e.BankDetails)
-                .WithRequired(e => e.Vendor)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Vendor>()
                 .HasMany(e => e.SubscriptionTypes)
                 .WithRequired(e => e.Vendor)
                 .WillCascadeOnDelete(false);
@@ -263,6 +258,11 @@ namespace MDS.Core
 
             modelBuilder.Entity<VendorCompany>()
                 .HasMany(e => e.AreaCovers)
+                .WithRequired(e => e.VendorCompany)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<VendorCompany>()
+                .HasMany(e => e.BankDetails)
                 .WithRequired(e => e.VendorCompany)
                 .WillCascadeOnDelete(false);
 

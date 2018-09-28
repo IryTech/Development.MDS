@@ -19,6 +19,8 @@ namespace MDS.Web.Controllers
         {
             var areaCovers = from ac in db.AreaCovers select new AreaVendor { AreaCoverId = ac.AreaCoverId, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.Title, YourUrl = ac.YourUrl };
             return View(areaCovers.ToList());
+            //var areaCovers = db.AreaCovers.Include(a => a.VendorCompany);
+            //return View(areaCovers.ToList());
         }
 
         [HttpGet]
@@ -28,7 +30,7 @@ namespace MDS.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var areaCovers = (from ac in db.AreaCovers select new AreaVendor { AreaCoverId = ac.AreaCoverId,VendorCompanyId=ac.VendorCompanyId, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.Title, YourUrl = ac.YourUrl }).SingleOrDefault();
+            var areaCovers = (from ac in db.AreaCovers where ac.AreaCoverId == id select new AreaVendor { AreaCoverId = ac.AreaCoverId, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.Title, YourUrl = ac.YourUrl }).SingleOrDefault();
             if (areaCovers == null)
             {
                 return HttpNotFound();
@@ -39,6 +41,7 @@ namespace MDS.Web.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name");
             return View();
         }
 
@@ -51,7 +54,9 @@ namespace MDS.Web.Controllers
             {
                 AreaCover areaCover = new AreaCover()
                 {
-                    VendorCompanyId = (int)System.Web.HttpContext.Current.Session["vendorBranchid"],
+                    //VendorCompanyId =(int)System.Web.HttpContext.Current.Session["vendorBranchid"],
+                    //ViewBag.CompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name"),
+                    VendorCompanyId=areaVendor.VendorCompanyId,
                     AreaName = areaVendor.AreaName,
                     PopularName=areaVendor.PopularName,
                     Title=areaVendor.Title,
@@ -59,6 +64,7 @@ namespace MDS.Web.Controllers
                 };
                 db.AreaCovers.Add(areaCover);
                 db.SaveChanges();
+                ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name", areaCover.VendorCompanyId);
                 return RedirectToAction("Index");
             }
             return View(areaVendor);
@@ -71,7 +77,7 @@ namespace MDS.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var areaCovers = (from ac in db.AreaCovers select new AreaVendor { AreaCoverId = ac.AreaCoverId,VendorCompanyId=ac.VendorCompanyId, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.Title, YourUrl = ac.YourUrl }).SingleOrDefault();
+            var areaCovers = (from ac in db.AreaCovers where ac.AreaCoverId == id select new AreaVendor { AreaCoverId = ac.AreaCoverId, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.Title, YourUrl = ac.YourUrl }).SingleOrDefault();
             if (areaCovers == null)
             {
                 return HttpNotFound();
@@ -103,7 +109,7 @@ namespace MDS.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var areaCovers = (from ac in db.AreaCovers select new AreaVendor { AreaCoverId = ac.AreaCoverId,VendorCompanyId=ac.VendorCompanyId, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.Title, YourUrl = ac.YourUrl }).SingleOrDefault();
+            var areaCovers = (from ac in db.AreaCovers where ac.AreaCoverId == id select new AreaVendor { AreaCoverId = ac.AreaCoverId,VendorCompanyId=ac.VendorCompanyId, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.Title, YourUrl = ac.YourUrl }).SingleOrDefault();
             if (areaCovers == null)
             {
                 return HttpNotFound();
