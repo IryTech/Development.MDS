@@ -9,6 +9,17 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+<p>
+    @using (Html.BeginForm("Index", "RegisterVendors", FormMethod.Get))
+    {
+        <div class="input-group">
+            <span class="input-group-btn">
+                <input class="btn btn-primary" type="submit" value="search" />
+            </span>
+            @Html.TextBox("search", null, new { @class = "form-control" })
+        </div>
+    }
+</p>
 <table class="table">
     <tr>
         <th>
@@ -29,41 +40,51 @@
         <th>Actions</th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td colspan="6" class="bg-danger">No records found!</td>
+        </tr>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <tr>
 
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.VendorName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Mobile)
-        </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VendorName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Mobile)
+                </td>
 
-        <td>
-            @Html.DisplayFor(modelItem => item.City)
-        </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
 
-        <td>
-            @Html.DisplayFor(modelItem => item.AddressLine1)
-        </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddressLine1)
+                </td>
 
-        <td>
-            @Html.ActionLink("Add Branch", "Create", "BranchVendors", new { id = item.VendorCompanyId }) |
-            @Html.ActionLink("Add Course", "Create", "VendorCourses") |
-            @Html.ActionLink("Area Cover", "Create", "AreaCovers") |
-            @Html.ActionLink("Add BankDetails", "Create", "BankDetails")
-        </td>
-    </tr>
-    <tr > 
-        <td style=" border-top:none;" colspan="5">
-            @Html.ActionLink("Edit", "Edit", new { id = item.VendorCompanyId }) |
-            @Html.ActionLink("Details", "Details", new { id = item.VendorCompanyId }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.VendorCompanyId })
-        </td>
-    </tr>
-}
+                <td>
+                    @Html.ActionLink("Add Branch", "Create", "BranchVendors", new { id = item.VendorCompanyId }) |
+                    @Html.ActionLink("Add Course", "Create", "VendorCourses") |
+                    @Html.ActionLink("Area Cover", "Create", "AreaCovers") |
+                    @Html.ActionLink("Add BankDetails", "Create", "BankDetails")
+                </td>
+            </tr>
+            <tr>
+                <td style=" border-top:none;" colspan="5">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.VendorCompanyId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.VendorCompanyId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.VendorCompanyId })
+                </td>
+            </tr>
+        }
+    }
 
-</table>
+    </table>

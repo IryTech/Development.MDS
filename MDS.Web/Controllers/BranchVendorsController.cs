@@ -14,7 +14,7 @@ namespace MDS.Web.Controllers
     {
         MdsDbContext db = new MdsDbContext();
         // GET: BranchVendors
-        public ActionResult Index()
+        public ActionResult Index(string search)
         {
             //var vendorId = (int)System.Web.HttpContext.Current.Session["vendorid"];
             //Vendor vendor = db.Vendors.Find(vendorId);
@@ -28,9 +28,16 @@ namespace MDS.Web.Controllers
                                Email = vc.Email, Mobile = vc.Mobile, Country = vc.Country, State = vc.State, City = vc.City, Street = vc.Street,
                                ZIPCode = vc.ZIPCode, AddressLine1 = vc.AddressLine1, AddressLine2 = vc.AddressLine2 } );
 
-            
 
-            return View(branchVendor.ToList());
+            if (search == null)
+            {
+                return View(branchVendor.ToList());
+            }
+            else
+            {
+                return View(branchVendor.Where(x => x.Name.StartsWith(search) || x.VendorName.StartsWith(search) || x.Mobile.StartsWith(search) || x.City.StartsWith(search) || x.AddressLine1.StartsWith(search)).ToList());
+
+            }
         }
         [HttpGet]
         public ActionResult Create()
