@@ -16,11 +16,17 @@ namespace MDS.Web.Controllers
         private MdsDbContext db = new MdsDbContext();
          
         // GET: Vendors
-        public ActionResult Index()
+        public ActionResult Index(string search)
         {
             var registerVendors = from s in db.Vendors select new RegisterVendor {VendorId=s.VendorId, FirstName= s.FirstName, LastName=s.LastName,Mobile=s.Mobile, Email=s.Email, Password=s.Password};
-           
+           if(search==null)
+            { 
             return View(registerVendors.ToList());
+            }
+           else
+            {
+                return View(registerVendors.Where(x => x.FirstName.StartsWith(search) || x.LastName.StartsWith(search) || x.Email.StartsWith(search) || x.Mobile.StartsWith(search)).ToList());
+            }
         }
 
         // GET: Vendors/Details/5
