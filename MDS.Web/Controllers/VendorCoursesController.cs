@@ -16,10 +16,17 @@ namespace MDS.Web.Controllers
         private MdsDbContext db = new MdsDbContext();
         int vendorCompanyId = (int) System.Web.HttpContext.Current.Session["VendorCompanyId"];
         // GET: VendorCourses
-        public ActionResult Index()
+        public ActionResult Index(string search)
         {
             var vendorCourses = from vc in db.VendorCourses select new CourseVendor {VendorCourseId=vc.VendorCourseId, VendorCompanyId=vc.VendorCompanyId,CourseTitle=vc.CourseTitle,Duration=vc.Duration,VendorPrice=vc.VendorPrice,ShortDescription=vc.ShortDescription, LongDescription=vc.LongDescription,Title=vc.Title,YourUrl=vc.YourUrl};
-            return View(vendorCourses.ToList());
+            if (search == null)
+            {
+                return View(vendorCourses.ToList());
+            }
+            else
+            {
+                return View(vendorCourses.Where(x => x.CourseTitle.StartsWith(search)).ToList());
+            }
         }
 
         [HttpGet]
