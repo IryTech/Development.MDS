@@ -17,7 +17,7 @@ namespace MDS.Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var areaCovers = from ac in db.AreaCovers select new AreaVendor { AreaCoverId = ac.AreaCoverId, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.Title, YourUrl = ac.YourUrl };
+            var areaCovers = from ac in db.AreaCovers join vc in db.VendorCompanies on ac.VendorCompanyId equals vc.VendorCompanyId select new AreaVendor { AreaCoverId = ac.AreaCoverId,BranchName=vc.Name, AreaName = ac.AreaName, PopularName = ac.PopularName};
             return View(areaCovers.ToList());
             //var areaCovers = db.AreaCovers.Include(a => a.VendorCompany);
             //return View(areaCovers.ToList());
