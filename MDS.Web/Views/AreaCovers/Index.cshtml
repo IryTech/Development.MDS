@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Area Cover</h2>
+<h2>Index</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -12,13 +12,16 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.BranchName)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.AreaName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.PopularName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.YourUrl)
         </th>
         <th>Action</th>
     </tr>
@@ -26,13 +29,16 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.BranchName)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.AreaName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.PopularName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.YourUrl)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id = item.AreaCoverId }) |
