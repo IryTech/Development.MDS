@@ -11,9 +11,16 @@ namespace MDS.Web.Models.Vendors
         public int VendorCourseId { get; set; }
 
         public int VendorCompanyId { get; set; }
-       
+
+        public int VehicleTypesId { get; set; }
+
+        public int VehicleId { get; set; }
+
         [Display(Name ="Course Name")]
         public string CourseTitle { get; set; }
+
+        [Display(Name = "Branch Name")]
+        public string BranchName { get; set; }
 
         [Display(Name = "Search text")]
         public string ShortDescription { get; set; }
@@ -26,6 +33,27 @@ namespace MDS.Web.Models.Vendors
 
         [Display(Name = "Price")]
         public decimal? VendorPrice { get; set; }
+
+        [Display(Name = "Wheals Type")]
+        public string WhealsType { get; set; }
+
+        //[Display(Name = "VehicleType Title")]
+        //public string VehicleTypeTitle { get; set; }
+
+        //[Display(Name = "VehicleType URL")]
+        //public string VehicleTypeUrl { get; set; }
+
+        [Display(Name = "Vehicle Company")]
+        public string VehicleCompany { get; set; }
+
+        [Display(Name = "Vehicle Model")]
+        public string VehicleModel { get; set; }
+
+        [Display(Name = "Vehicle Title")]
+        public string VehicelTitle { get; set; }
+
+        [Display(Name = "Vehicle URL")]
+        public string VehicleUrl { get; set; }
 
         [Display(Name = "Course Title")]
         public string Title { get; set; }

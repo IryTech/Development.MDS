@@ -8,12 +8,6 @@ namespace MDS.Core
 
     public partial class VehicleType
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public VehicleType()
-        {
-            Vehicles = new HashSet<Vehicle>();
-        }
-
         [Key]
         public int VehicleTypesId { get; set; }
 
@@ -23,10 +17,10 @@ namespace MDS.Core
         public string WhealsType { get; set; }
 
         [StringLength(100)]
-        public string Title { get; set; }
+        public string VehicleTypeTitle { get; set; }
 
         [StringLength(100)]
-        public string YourUrl { get; set; }
+        public string VehicleTypeUrl { get; set; }
 
         public int? CreatedBy { get; set; }
 
@@ -35,9 +29,6 @@ namespace MDS.Core
         public int? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Vehicle> Vehicles { get; set; }
 
         public virtual VendorCourse VendorCourse { get; set; }
     }

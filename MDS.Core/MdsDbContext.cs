@@ -14,7 +14,9 @@ namespace MDS.Core
 
         public virtual DbSet<AreaCover> AreaCovers { get; set; }
         public virtual DbSet<BankDetail> BankDetails { get; set; }
+        public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<State> States { get; set; }
         public virtual DbSet<SubscriptionType> SubscriptionTypes { get; set; }
         public virtual DbSet<Vehicle> Vehicles { get; set; }
         public virtual DbSet<VehicleType> VehicleTypes { get; set; }
@@ -69,6 +71,10 @@ namespace MDS.Core
                 .Property(e => e.City)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<City>()
+                .Property(e => e.Name)
+                .IsUnicode(false);
+
             modelBuilder.Entity<Customer>()
                 .Property(e => e.FirstName)
                 .IsUnicode(false);
@@ -121,6 +127,10 @@ namespace MDS.Core
                 .Property(e => e.AddressLine2)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<State>()
+                .Property(e => e.Name)
+                .IsUnicode(false);
+
             modelBuilder.Entity<SubscriptionType>()
                 .Property(e => e.Title)
                 .IsUnicode(false);
@@ -138,11 +148,11 @@ namespace MDS.Core
                 .IsUnicode(false);
 
             modelBuilder.Entity<Vehicle>()
-                .Property(e => e.Title)
+                .Property(e => e.VehicleTitle)
                 .IsUnicode(false);
 
             modelBuilder.Entity<Vehicle>()
-                .Property(e => e.YourUrl)
+                .Property(e => e.VehicleUrl)
                 .IsUnicode(false);
 
             modelBuilder.Entity<VehicleType>()
@@ -150,17 +160,12 @@ namespace MDS.Core
                 .IsUnicode(false);
 
             modelBuilder.Entity<VehicleType>()
-                .Property(e => e.Title)
+                .Property(e => e.VehicleTypeTitle)
                 .IsUnicode(false);
 
             modelBuilder.Entity<VehicleType>()
-                .Property(e => e.YourUrl)
+                .Property(e => e.VehicleTypeUrl)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<VehicleType>()
-                .HasMany(e => e.Vehicles)
-                .WithRequired(e => e.VehicleType)
-                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Vendor>()
                 .Property(e => e.FirstName)

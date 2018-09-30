@@ -124,9 +124,10 @@ namespace MDS.Web.Controllers
             }
             var branchVendor = (from vc in db.VendorCompanies
                                 join vm in db.VendorImages on vc.VendorCompanyId equals vm.VendorCompanyId
-                                where vc.VendorCompanyId == id
+                                where vc.VendorCompanyId == id 
                                 select new BranchVendor
                                 {
+                                   // VendorCompanyId = vc.VendorCompanyId,
                                     Name = vc.Name,
                                     Mobile = vc.Mobile,
                                     Email = vc.Email,
@@ -148,7 +149,7 @@ namespace MDS.Web.Controllers
             return View(branchVendor);
         }
         [HttpPost]
-        public ActionResult Edit(BranchVendor branchVendor ,int id)
+        public ActionResult Edit(BranchVendor branchVendor,int id)
         {
             if (ModelState.IsValid)
             {
@@ -184,7 +185,7 @@ namespace MDS.Web.Controllers
 
             var branchVendor = (from vc in db.VendorCompanies
                                 join vm in db.VendorImages on vc.VendorCompanyId equals vm.VendorCompanyId
-                                where vc.VendorCompanyId == id
+                                where (vc.VendorCompanyId == id)
                                 select new BranchVendor
                                 {
                                     VendorCompanyId=vc.VendorCompanyId,
@@ -215,6 +216,8 @@ namespace MDS.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+             BankDetail bankDetail = db.BankDetails.Find(id);
+            db.BankDetails.Remove(bankDetail);
             VendorCompany vendorCompany = db.VendorCompanies.Find(id);
             db.VendorCompanies.Remove(vendorCompany);
             VendorImage vendorImage = db.VendorImages.Find(id);

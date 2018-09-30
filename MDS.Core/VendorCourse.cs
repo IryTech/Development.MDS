@@ -12,6 +12,7 @@ namespace MDS.Core
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public VendorCourse()
         {
+            Vehicles = new HashSet<Vehicle>();
             VehicleTypes = new HashSet<VehicleType>();
             VendorImages = new HashSet<VendorImage>();
         }
@@ -46,6 +47,9 @@ namespace MDS.Core
         public int? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Vehicle> Vehicles { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VehicleType> VehicleTypes { get; set; }

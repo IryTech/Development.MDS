@@ -86,14 +86,14 @@ namespace MDS.Web.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "AreaCoverId,VendorCompanyId,AreaName,PopularName,Title,YourUrl,CreatedBy,CreatedOn,UpdatedBy,UpdatedOn")] AreaVendor areaVendor,int id)
+        public ActionResult Edit(AreaVendor areaVendor,int id)
         {
             if (ModelState.IsValid)
             {
                 AreaCover areaCover = db.AreaCovers.Find(id);
                 areaCover.AreaName = areaVendor.AreaName;
                 areaCover.PopularName = areaVendor.PopularName;
-                areaCover.Title = areaVendor.PopularName;
+                areaCover.Title = areaVendor.Title;
                 areaCover.YourUrl = areaVendor.YourUrl;
                 db.Entry(areaCover).State = EntityState.Modified;
                 db.SaveChanges();
