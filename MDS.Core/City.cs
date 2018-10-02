@@ -13,9 +13,9 @@ namespace MDS.Core
         public int CityId { get; set; }
 
         [StringLength(40)]
-        public string Name { get; set; }
+        public string CityName { get; set; }
 
-        public int? StateId { get; set; }
+        public int? StateId { get; set; } 
 
         public virtual State State { get; set; }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -24,7 +25,7 @@ namespace MDS.Web.Controllers
                                 join v in db.Vendors on vc.VendorId equals v.VendorId
                                join vm in db.VendorImages on vc.VendorCompanyId equals vm.VendorCompanyId
                                select new BranchVendor { VendorCompanyId = vc.VendorCompanyId, VendorName=v.FirstName,
-                               Name = vc.Name, ImageName = vm.ImageName, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription,
+                               Name = vc.Name,ImageName= vm.ImageName, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription,
                                Email = vc.Email, Mobile = vc.Mobile, Country = vc.Country, State = vc.State, City = vc.City, Street = vc.Street,
                                ZIPCode = vc.ZIPCode, AddressLine1 = vc.AddressLine1, AddressLine2 = vc.AddressLine2 } );
 
@@ -46,45 +47,67 @@ namespace MDS.Web.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Create(BranchVendor branchVendor)           
+        public ActionResult Create(BranchVendor branchVendor, HttpPostedFileBase File)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
+              { 
+            VendorCompany vendorCompany = new VendorCompany()
             {
-                VendorCompany vendorCompany = new VendorCompany()
-                {
-                    VendorId = (int)System.Web.HttpContext.Current.Session["vendorid"],
-                    Name = branchVendor.Name,
-                    ShortDescription=branchVendor.ShortDescription,
-                    LongDescription=branchVendor.LongDescription,
-                    Email=branchVendor.Email,
-                    Mobile=branchVendor.Mobile,
-                    Country=branchVendor.Country,
-                    State=branchVendor.State,
-                    City=branchVendor.City,
-                    Street=branchVendor.Street,
-                    ZIPCode=branchVendor.ZIPCode,
-                    AddressLine1=branchVendor.AddressLine1,
-                    AddressLine2=branchVendor.AddressLine2,
-                   // CreatedOn=DateTime.Now                   
-                };                
-                //db.VendorCompanies.Add(vendorCompany);
-               // db.SaveChanges();
-                
-                var vendorCompanyId = vendorCompany.VendorCompanyId;
+                VendorId = (int)System.Web.HttpContext.Current.Session["vendorid"],
+                Name = branchVendor.Name,
+                ShortDescription = branchVendor.ShortDescription,
+                LongDescription = branchVendor.LongDescription,
+                Email = branchVendor.Email,
+                Mobile = branchVendor.Mobile,
+                Country = branchVendor.Country,
+                State = branchVendor.State,
+                City = branchVendor.City,
+                Street = branchVendor.Street,
+                ZIPCode = branchVendor.ZIPCode,
+                AddressLine1 = branchVendor.AddressLine1,
+                AddressLine2 = branchVendor.AddressLine2,
+            };
                 db.VendorCompanies.Add(vendorCompany);
 
-                VendorImage vendorImage = new VendorImage()
+
+                VendorImage vendorImage = new VendorImage();
+                if (File == null)
                 {
-                    VendorCompanyId = vendorCompanyId,
-                    ImageName = branchVendor.ImageName,
-                    ImageLocation = branchVendor.ImageLocation
-                };
-                db.VendorImages.Add(vendorImage);
+                    ViewBag.mess = "please select image.";
+                }
+                else
+                {
+                    string filex = Path.GetExtension(File.FileName);
+
+                    if (filex.Equals(".jpg") || filex.Equals(".png"))
+                    {
+                        string filename = Guid.NewGuid().ToString() + filex;
+                        string filepath = Path.Combine(Server.MapPath("~/ImageFolder/"), filename);
+                        File.SaveAs(filepath);
+                        vendorImage.VendorCompanyId = branchVendor.VendorCompanyId;
+                        vendorImage.ImageName = filename;
+                        db.VendorImages.Add(vendorImage);
+                    }
+                }
                 db.SaveChanges();
-                Session["VendorCompanyId"] = vendorCompany.VendorCompanyId;
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            return View(branchVendor);
         }
+        // //   vendorImage.ImageLocation = new byte[file.ContentLength]; // file1 to store image in binary formate  
+        // //   file.InputStream.Read(vendorImage.ImageLocation, 0, file.ContentLength);
+
+        // vendorImage.ImageNam= System.IO.Path.GetFileName(file.FileName); //file2 to store path and url  
+        // string physicalPath = Server.MapPath("~/ImageFolder/" + vendorImage.ImageName);
+        // //save image in folder
+        // file.SaveAs(physicalPath);
+        //// store path in database
+        // vendorImage.ImageName = "ImageFolder/" + vendorImage.ImageName;
+        //    db.SaveChanges();
+        //    Session["VendorCompanyId"] = vendorCompany.VendorCompanyId;
+        //}
+
+
         [HttpGet]
         public ActionResult Details(int? id)
        {
@@ -167,9 +190,9 @@ namespace MDS.Web.Controllers
                 vendorCompany.ShortDescription = branchVendor.ShortDescription;
                 vendorCompany.LongDescription = branchVendor.LongDescription;                  
                 db.Entry(vendorCompany).State = EntityState.Modified;
-                VendorImage vendorImage = db.VendorImages.Find(id);
-                vendorImage.ImageName = branchVendor.ImageName;
-                db.Entry(vendorImage).State = EntityState.Modified;
+                var vendorImage = db.VendorImages.FirstOrDefault(x => x.VendorCompanyId == id);
+                vendorImage.ImageName = branchVendor.ImageName; 
+                db.Entry(vendorImage).State = EntityState.Modified; 
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -216,12 +239,17 @@ namespace MDS.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-             BankDetail bankDetail = db.BankDetails.Find(id);
-            db.BankDetails.Remove(bankDetail);
-            VendorCompany vendorCompany = db.VendorCompanies.Find(id);
+            //var bankDetail = db.BankDetails.FirstOrDefault(x => x.VendorCompanyId == id);
+            //db.BankDetails.Remove(bankDetail);
+
+            var vendorCourse = db.VendorCourses.FirstOrDefault(x => x.VendorCompanyId == id);
+            db.VendorCourses.Remove(vendorCourse);
+
+            var vendorCompany = db.VendorCompanies.FirstOrDefault(x=>x.VendorCompanyId==id);
             db.VendorCompanies.Remove(vendorCompany);
-            VendorImage vendorImage = db.VendorImages.Find(id);
-            db.VendorImages.Remove(vendorImage);
+
+            var vendorImages = db.VendorImages.FirstOrDefault(x => x.VendorCompanyId == id);
+            db.VendorImages.Remove(vendorImages);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

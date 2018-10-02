@@ -72,7 +72,7 @@ namespace MDS.Core
                 .IsUnicode(false);
 
             modelBuilder.Entity<City>()
-                .Property(e => e.Name)
+                .Property(e => e.CityName)
                 .IsUnicode(false);
 
             modelBuilder.Entity<Customer>()
@@ -128,7 +128,7 @@ namespace MDS.Core
                 .IsUnicode(false);
 
             modelBuilder.Entity<State>()
-                .Property(e => e.Name)
+                .Property(e => e.StateName)
                 .IsUnicode(false);
 
             modelBuilder.Entity<SubscriptionType>()
@@ -311,10 +311,6 @@ namespace MDS.Core
 
             modelBuilder.Entity<VendorImage>()
                 .Property(e => e.ImageName)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<VendorImage>()
-                .Property(e => e.ImageLocation)
                 .IsUnicode(false);
         }
     }

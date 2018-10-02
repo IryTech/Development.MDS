@@ -14,13 +14,24 @@ namespace MDS.Web.Models.Vendors
 
         public int VendorImageId { get; set; }
 
+        public int StateId { get; set; }
+
+        public int CityId { get; set; }
+
         [Display(Name = "Branch Banner")]
         public string ImageName { get; set; }
 
-        public string ImageLocation { get; set; }
+        [Display(Name = "State")]
+        public string StateName { get; set; }
+
+        [Display(Name = "State")]
+        public string CityName { get; set; }
+
+        // public byte ImageLocation { get; set; }
 
         [Display(Name="Branch Name")]
         public string Name { get; set; }
+
         public string VendorName { get; set; }
 
         [Display(Name = "Branch Helpline")]

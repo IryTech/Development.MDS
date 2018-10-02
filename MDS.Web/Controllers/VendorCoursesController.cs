@@ -63,7 +63,6 @@ namespace MDS.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create( CourseVendor courseVendor)
         {
-            
             if (ModelState.IsValid)
             {
                 VendorCourse vendorCourse = new VendorCourse()
@@ -89,7 +88,7 @@ namespace MDS.Web.Controllers
                     VendorCourseId=courseVendor.VendorCourseId,
                     VehicleCompany=courseVendor.VehicleCompany,
                     VehicleModel=courseVendor.VehicleModel,
-                    VehicleTitle=courseVendor.VehicleModel,
+                    VehicleTitle=courseVendor.VehicelTitle,
                     VehicleUrl=courseVendor.VehicleUrl,
                 };
                 db.Vehicles.Add(vehicle);
@@ -111,10 +110,9 @@ namespace MDS.Web.Controllers
             var vendorCourses = (from vc in db.VendorCourses
                                  join v in db.Vehicles on vc.VendorCourseId equals v.VendorCourseId
                                  join vt in db.VehicleTypes on v.VendorCourseId equals vt.VendorCourseId
-                                 where vc.VendorCourseId == id && v.VendorCourseId==id && vt.VendorCourseId==id
+                                 where vc.VendorCourseId == id where v.VendorCourseId==id where vt.VendorCourseId==id
                                  select new CourseVendor
                                  {
-                                     //VendorCourseId = vc.VendorCourseId,
                                      CourseTitle = vc.CourseTitle,
                                      WhealsType = vt.WhealsType,
                                      VehicleCompany = v.VehicleCompany,
@@ -149,14 +147,10 @@ namespace MDS.Web.Controllers
                 vendorCourse.Title = courseVendor.Title;
                 vendorCourse.YourUrl = courseVendor.YourUrl;
                 db.Entry(vendorCourse).State = EntityState.Modified;
-                db.SaveChanges();
-
-                VehicleType vehicleType = db.VehicleTypes.Find(id);
-                vehicleType.WhealsType = courseVendor.WhealsType;
-                db.Entry(vehicleType).State = EntityState.Modified;
-
-                Vehicle vehicle = db.Vehicles.Find(id);
-                var key1 = db.Vehicles.Find(vehicle.VendorCourseId);
+                var vehicletype = db.VehicleTypes.FirstOrDefault(x => x.VendorCourseId == id);
+                vehicletype.WhealsType = courseVendor.WhealsType;
+                db.Entry(vehicletype).State = EntityState.Modified;
+                var vehicle= db.Vehicles.FirstOrDefault(x => x.VendorCourseId == id);
                 vehicle.VehicleCompany = courseVendor.VehicleCompany;
                 vehicle.VehicleModel = courseVendor.VehicleModel;
                 vehicle.VehicleTitle = courseVendor.CourseTitle;
@@ -178,11 +172,9 @@ namespace MDS.Web.Controllers
             var vendorCourses = (from vc in db.VendorCourses
                                  join vt in db.VehicleTypes on vc.VendorCourseId equals vt.VendorCourseId
                                  join v in db.Vehicles on vt.VendorCourseId equals v.VendorCourseId
-                                 where v.VendorCourseId==id 
+                                 where vc.VendorCourseId==id where vt.VendorCourseId==id where  v.VendorCourseId==id
                                  select new CourseVendor
                                  {
-                                     
-                                     
                                      CourseTitle = vc.CourseTitle,
                                      WhealsType = vt.WhealsType,
                                      VehicleCompany = v.VehicleCompany,
@@ -203,7 +195,6 @@ namespace MDS.Web.Controllers
             }
             return View(vendorCourses);
         }
-
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -211,14 +202,13 @@ namespace MDS.Web.Controllers
            
             VendorCourse vendorCourse = db.VendorCourses.Find(id);           
             db.VendorCourses.Remove(vendorCourse);
-            Vehicle vehicle = db.Vehicles.Find(id);
+            var vehicle = db.Vehicles.FirstOrDefault(x => x.VendorCourseId == id);
             db.Vehicles.Remove(vehicle);
-            VehicleType vehicleType = db.VehicleTypes.Find(id);
-            db.VehicleTypes.Remove(vehicleType);
+            var vehicletype = db.VehicleTypes.FirstOrDefault(x => x.VendorCourseId == id);
+            db.VehicleTypes.Remove(vehicletype);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -13,7 +13,7 @@ namespace MDS.Core
 
         public string ImageName { get; set; }
 
-        public string ImageLocation { get; set; }
+        public byte[] ImageLocation { get; set; }
 
         public int? VendorCompanyId { get; set; }
 
