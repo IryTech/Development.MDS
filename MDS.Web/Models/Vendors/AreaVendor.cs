@@ -12,6 +12,9 @@ namespace MDS.Web.Models.Vendors
 
         public int VendorCompanyId { get; set; }
 
+        [Display(Name = "Branch Name")]
+        public string BranchName { get; set; }
+
         [Display (Name ="Area Name")]
         public string AreaName { get; set; }
 

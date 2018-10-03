@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MDS.Core;
+using MDS.Web.Models.Vendors;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using MDS.Core;
-using MDS.Web.Models.Vendors;
 namespace MDS.Web.Controllers
 {
     public class AreaCoversController : Controller
@@ -17,7 +14,7 @@ namespace MDS.Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var areaCovers = from ac in db.AreaCovers select new AreaVendor { AreaCoverId = ac.AreaCoverId, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.Title, YourUrl = ac.YourUrl };
+            var areaCovers = from ac in db.AreaCovers join v in db.VendorCompanies on ac.VendorCompanyId equals v.VendorCompanyId select new AreaVendor { AreaCoverId = ac.AreaCoverId,BranchName=v.Name, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.Title, YourUrl = ac.YourUrl };
             return View(areaCovers.ToList());
             //var areaCovers = db.AreaCovers.Include(a => a.VendorCompany);
             //return View(areaCovers.ToList());

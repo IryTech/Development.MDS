@@ -22,6 +22,7 @@ namespace MDS.Web.Models.Customers
         [Display(Name = "Mobile No:")]
         public string Mobile { get; set; }
 
+        [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
