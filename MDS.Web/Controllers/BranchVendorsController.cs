@@ -68,8 +68,6 @@ namespace MDS.Web.Controllers
                 AddressLine2 = branchVendor.AddressLine2,
             };
                 db.VendorCompanies.Add(vendorCompany);
-
-
                 VendorImage vendorImage = new VendorImage();
                 if (File == null)
                 {
@@ -86,6 +84,7 @@ namespace MDS.Web.Controllers
                         File.SaveAs(filepath);
                         vendorImage.VendorCompanyId = branchVendor.VendorCompanyId;
                         vendorImage.ImageName = filename;
+                        vendorImage.ImageLocation = filepath;
                         db.VendorImages.Add(vendorImage);
                     }
                 }

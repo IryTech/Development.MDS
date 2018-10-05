@@ -312,6 +312,10 @@ namespace MDS.Core
             modelBuilder.Entity<VendorImage>()
                 .Property(e => e.ImageName)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<VendorImage>()
+               .Property(e => e.ImageLocation)
+               .IsUnicode(false);
         }
     }
 }

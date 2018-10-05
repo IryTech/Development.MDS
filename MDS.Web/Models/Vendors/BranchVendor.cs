@@ -21,13 +21,14 @@ namespace MDS.Web.Models.Vendors
         [Display(Name = "Branch Banner")]
         public string ImageName { get; set; }
 
+        [Display(Name = "Banner Location")]
+        public string ImageLocation { get; set; }
+
         [Display(Name = "State")]
         public string StateName { get; set; }
 
         [Display(Name = "State")]
         public string CityName { get; set; }
-
-        // public byte ImageLocation { get; set; }
 
         [Display(Name="Branch Name")]
         public string Name { get; set; }

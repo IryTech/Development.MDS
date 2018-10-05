@@ -49,13 +49,25 @@ namespace MDS.Web.Controllers
         {
             return View();
         }
+        public JsonResult CheckForDuplication(string Email)
+        {
+            var data = db.Vendors.Where(p => p.Email.Equals(Email, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
 
+            if (data != null)
+            {
+                return Json("Sorry, this name already exists", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+        }
         // POST: Vendors/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "VendorId,FirstName,LastName,Email,Mobile,Password,ConfirmPassword,Designation,DateofBirth,CreatedBy,CreatedOn,UpdatedBy,UpdatedOn")] RegisterVendor  registerVendor)
+        public ActionResult Create( RegisterVendor  registerVendor)
         {
             if (ModelState.IsValid)
             {
@@ -73,9 +85,11 @@ namespace MDS.Web.Controllers
                 Session["vendorId"] = vendor.VendorId;
                 return RedirectToAction("Create","BranchVendors");
             }
-
+             
             return View(registerVendor);
         }
+
+        
 
         // GET: Vendors/Edit/5
         public ActionResult Edit(int? id)
