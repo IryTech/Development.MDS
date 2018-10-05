@@ -114,7 +114,7 @@ namespace MDS.Web.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "VendorId,FirstName,LastName,Email,Mobile,Password,ConfirmPassword,Designation,DateofBirth,CreatedBy,CreatedOn,UpdatedBy,UpdatedOn")] RegisterVendor registerVendor, int id)
+        public ActionResult Edit(RegisterVendor registerVendor, int id)
         {
 
             if (ModelState.IsValid)

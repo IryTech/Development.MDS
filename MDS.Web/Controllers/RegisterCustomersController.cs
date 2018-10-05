@@ -51,12 +51,22 @@ namespace MDS.Web.Controllers
             return View();
         }
 
-        // POST: Customers/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        public JsonResult CheckForDuplication(string Email)
+            {
+            var data = db.Customers.Where(c => c.Email.Equals(Email, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+
+            if (data != null)
+            {
+                return Json("Sorry, this name already exists", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CustomerId,FirstName,LastName,Email,Mobile,Password")] Customer customer)
+        public ActionResult Create(Customer customer)
         {
             if (ModelState.IsValid)
             {
