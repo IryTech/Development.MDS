@@ -11,30 +11,9 @@ namespace MDS.Core
     {
         public int VehicleId { get; set; }
 
-        public int? VendorCourseId { get; set; }
-
-        public int? VehicleTypesId { get; set; }
-
         [StringLength(100)]
         public string VehicleCompany { get; set; }
 
-        [StringLength(50)]
-        public string VehicleModel { get; set; }
-
-        [StringLength(100)]
-        public string VehicleTitle { get; set; }
-
-        [StringLength(100)]
-        public string VehicleUrl { get; set; }
-
-        public int? CreatedBy { get; set; }
-
-        public DateTime? CreatedOn { get; set; }
-
-        public int? UpdatedBy { get; set; }
-
-        public DateTime? UpdatedOn { get; set; }
-
-        public virtual VendorCourse VendorCourse { get; set; }
+        public virtual ICollection<VehicleModel> VehicleModels{ get; set; }
     }
 }

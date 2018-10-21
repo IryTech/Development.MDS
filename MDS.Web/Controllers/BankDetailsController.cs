@@ -41,7 +41,7 @@ namespace MDS.Web.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name");
+            ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "BranchName", "VendorCompanyId");
             return View();
         }
 

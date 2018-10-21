@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MDS.Core;
+using MDS.Web.Models.Vendors;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
@@ -6,8 +8,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using MDS.Core;
-using MDS.Web.Models.Vendors;
 
 namespace MDS.Web.Controllers
 {
@@ -17,51 +17,55 @@ namespace MDS.Web.Controllers
         // GET: BranchVendors
         public ActionResult Index(string search)
         {
-            //var vendorId = (int)System.Web.HttpContext.Current.Session["vendorid"];
-            //Vendor vendor = db.Vendors.Find(vendorId);
-            //var vendorName = vendor.FirstName;
-
             var branchVendor = (from vc in db.VendorCompanies  
-                                join v in db.Vendors on vc.VendorId equals v.VendorId
-                               join vm in db.VendorImages on vc.VendorCompanyId equals vm.VendorCompanyId
-                               select new BranchVendor { VendorCompanyId = vc.VendorCompanyId, VendorName=v.FirstName,
-                               Name = vc.Name,ImageName= vm.ImageName, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription,
-                               Email = vc.Email, Mobile = vc.Mobile, Country = vc.Country, State = vc.State, City = vc.City, Street = vc.Street,
-                               ZIPCode = vc.ZIPCode, AddressLine1 = vc.AddressLine1, AddressLine2 = vc.AddressLine2 } );
-
-
+                                join v in db.Vendors on vc.VendorId equals v.VendorId join s in db.States on vc.State equals s.StateId
+                                join c in db.Cities on vc.City equals c.CityId
+                                join vi in db.VendorImages on vc.VendorCompanyId equals vi.VendorCompanyId
+                               select new BranchVendor { VendorCompanyId = vc.VendorCompanyId, VendorName=v.FirstName, BranchName = vc.BranchName,
+                               Email = vc.Email, Mobile = vc.Mobile, Country = vc.Country, StateName=s.StateName, CityName =c.CityName,ImageName=vi.ImageName
+                               } );
             if (search == null)
             {
                 return View(branchVendor.ToList());
             }
             else
             {
-                return View(branchVendor.Where(x => x.Name.StartsWith(search) || x.VendorName.StartsWith(search) || x.Mobile.StartsWith(search) || x.City.StartsWith(search) || x.AddressLine1.StartsWith(search)).ToList());
+                return View(branchVendor.Where(x => x.BranchName.StartsWith(search) || x.VendorName.StartsWith(search) || x.Mobile.StartsWith(search) || x.CityName.StartsWith(search)).ToList());
 
             }
         }
+
         [HttpGet]
         public ActionResult Create()
         {
-
+            ViewBag.country = "India";
+            ViewBag.stateList = new SelectList(db.States, "StateId", "StateName");
             return View();
         }
+
+        public JsonResult GetStateList(int StateId)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            List<City> CityList = db.Cities.Where(x => x.StateId == StateId).ToList();
+            return Json(CityList, JsonRequestBehavior.AllowGet);
+
+        }
         [HttpPost]
-        public ActionResult Create(BranchVendor branchVendor, HttpPostedFileBase File)
+        public ActionResult Create(BranchVendor branchVendor,HttpPostedFileBase File)
         {
             if (ModelState.IsValid)
               { 
             VendorCompany vendorCompany = new VendorCompany()
             {
                 VendorId = (int)System.Web.HttpContext.Current.Session["vendorid"],
-                Name = branchVendor.Name,
+                BranchName = branchVendor.BranchName,
                 ShortDescription = branchVendor.ShortDescription,
                 LongDescription = branchVendor.LongDescription,
                 Email = branchVendor.Email,
                 Mobile = branchVendor.Mobile,
                 Country = branchVendor.Country,
-                State = branchVendor.State,
-                City = branchVendor.City,
+                State =branchVendor.StateId,
+                City =branchVendor. CityId,
                 Street = branchVendor.Street,
                 ZIPCode = branchVendor.ZIPCode,
                 AddressLine1 = branchVendor.AddressLine1,
@@ -79,34 +83,22 @@ namespace MDS.Web.Controllers
 
                     if (filex.Equals(".jpg") || filex.Equals(".png"))
                     {
-                        string filename = Guid.NewGuid().ToString() + filex;
-                        string filepath = Path.Combine(Server.MapPath("~/ImageFolder/"), filename);
-                        File.SaveAs(filepath);
+                        string imageName = System.IO.Path.GetFileName(File.FileName);
+                        string Filepath = Server.MapPath("~/ImageFolder/" + imageName);
+                        File.SaveAs(Filepath);
                         vendorImage.VendorCompanyId = branchVendor.VendorCompanyId;
-                        vendorImage.ImageName = filename;
-                        vendorImage.ImageLocation = filepath;
+                        vendorImage.ImageName = imageName;
                         db.VendorImages.Add(vendorImage);
                     }
                 }
+
+                ViewBag.StateList = db.States;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(branchVendor);
         }
-        // //   vendorImage.ImageLocation = new byte[file.ContentLength]; // file1 to store image in binary formate  
-        // //   file.InputStream.Read(vendorImage.ImageLocation, 0, file.ContentLength);
-
-        // vendorImage.ImageNam= System.IO.Path.GetFileName(file.FileName); //file2 to store path and url  
-        // string physicalPath = Server.MapPath("~/ImageFolder/" + vendorImage.ImageName);
-        // //save image in folder
-        // file.SaveAs(physicalPath);
-        //// store path in database
-        // vendorImage.ImageName = "ImageFolder/" + vendorImage.ImageName;
-        //    db.SaveChanges();
-        //    Session["VendorCompanyId"] = vendorCompany.VendorCompanyId;
-        //}
-
-
+        
         [HttpGet]
         public ActionResult Details(int? id)
        {
@@ -115,54 +107,59 @@ namespace MDS.Web.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var branchDetail = (from vc in db.VendorCompanies
-                                join vm in db.VendorImages on vc.VendorCompanyId equals vm.VendorCompanyId
-                                where vc.VendorCompanyId == id
+                                join v in db.Vendors on vc.VendorId equals v.VendorId
+                                join s in db.States on vc.State equals s.StateId
+                                join c in db.Cities on vc.City equals c.CityId
+                                join vi in db.VendorImages on vc.VendorCompanyId equals vi.VendorCompanyId
+                                where (vc.VendorCompanyId == id)
                                 select new BranchVendor
                                 {
                                     VendorCompanyId = vc.VendorCompanyId,
-                                    Name = vc.Name,
+                                    BranchName = vc.BranchName,
                                     Mobile = vc.Mobile,
                                     Email = vc.Email,
                                     Country = vc.Country,
-                                    State = vc.State,
-                                    City = vc.City,
+                                    StateName = s.StateName,
+                                    CityName = c.CityName,
                                     Street = vc.Street,
                                     ZIPCode = vc.ZIPCode,
                                     AddressLine1 = vc.AddressLine1,
                                     AddressLine2 = vc.AddressLine2,
                                     ShortDescription = vc.ShortDescription,
                                     LongDescription = vc.LongDescription,
-                                    ImageName = vm.ImageName,
+                                    ImageName = vi.ImageName,
                                 }).SingleOrDefault();
             return View(branchDetail);
         }
         [HttpGet]
         public ActionResult Edit(int? id)
         {
-
+            ViewBag.StateId = new SelectList(db.States, "StateId", "StateName");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var branchVendor = (from vc in db.VendorCompanies
-                                join vm in db.VendorImages on vc.VendorCompanyId equals vm.VendorCompanyId
-                                where vc.VendorCompanyId == id 
+                               join v in db.Vendors on vc.VendorId equals v.VendorId
+                               join s in db.States on vc.State equals s.StateId
+                               join c in db.Cities on vc.City equals c.CityId
+                               join vi in db.VendorImages on vc.VendorCompanyId equals vi.VendorCompanyId
+                                where (vc.VendorCompanyId == id)
                                 select new BranchVendor
                                 {
-                                   // VendorCompanyId = vc.VendorCompanyId,
-                                    Name = vc.Name,
+                                    BranchName = vc.BranchName,
                                     Mobile = vc.Mobile,
                                     Email = vc.Email,
                                     Country = vc.Country,
                                     State = vc.State,
-                                    City = vc.City,
-                                    Street = vc.Street,
+                                    StateName = s.StateName,
+                                    CityName = c.CityName,
                                     ZIPCode = vc.ZIPCode,
                                     AddressLine1 = vc.AddressLine1,
                                     AddressLine2 = vc.AddressLine2,
                                     ShortDescription = vc.ShortDescription,
                                     LongDescription = vc.LongDescription,
-                                    ImageName = vm.ImageName,
+                                    ImageName = vi.ImageName,
                                 }).SingleOrDefault();
             if (branchVendor== null)
             {
@@ -176,12 +173,12 @@ namespace MDS.Web.Controllers
             if (ModelState.IsValid)
             {
                 VendorCompany vendorCompany   = db.VendorCompanies.Find(id);
-                vendorCompany.Name = branchVendor.Name;
+                vendorCompany.BranchName = branchVendor.BranchName;
                 vendorCompany.Mobile = branchVendor.Mobile;
                 vendorCompany.Email = branchVendor.Email;
                 vendorCompany.Country = branchVendor.Country;
-                vendorCompany.State = branchVendor.State;
-                vendorCompany.City = branchVendor.City;
+                vendorCompany.State = branchVendor.StateId;
+                vendorCompany.City = branchVendor.CityId;
                 vendorCompany.Street = branchVendor.Street;
                 vendorCompany.ZIPCode = branchVendor.ZIPCode;
                 vendorCompany.AddressLine1 = branchVendor.AddressLine1;
@@ -206,24 +203,27 @@ namespace MDS.Web.Controllers
             }
 
             var branchVendor = (from vc in db.VendorCompanies
-                                join vm in db.VendorImages on vc.VendorCompanyId equals vm.VendorCompanyId
+                                join v in db.Vendors on vc.VendorId equals v.VendorId
+                                join s in db.States on vc.State equals s.StateId
+                                join c in db.Cities on vc.City equals c.CityId
+                                join vi in db.VendorImages on vc.VendorCompanyId equals vi.VendorCompanyId
                                 where (vc.VendorCompanyId == id)
                                 select new BranchVendor
                                 {
                                     VendorCompanyId=vc.VendorCompanyId,
-                                    Name = vc.Name,
+                                    BranchName = vc.BranchName,
                                     Mobile = vc.Mobile,
                                     Email = vc.Email,
                                     Country = vc.Country,
-                                    State = vc.State,
-                                    City = vc.City,
+                                    StateName = s.StateName,
+                                    CityName = c.CityName,
                                     Street = vc.Street,
                                     ZIPCode = vc.ZIPCode,
                                     AddressLine1 = vc.AddressLine1,
                                     AddressLine2 = vc.AddressLine2,
                                     ShortDescription = vc.ShortDescription,
                                     LongDescription = vc.LongDescription,
-                                    ImageName = vm.ImageName,
+                                    ImageName = vi.ImageName,
                                 }).SingleOrDefault();
 
             if (branchVendor == null)

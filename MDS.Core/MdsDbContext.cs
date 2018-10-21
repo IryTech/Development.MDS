@@ -17,9 +17,9 @@ namespace MDS.Core
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<State> States { get; set; }
-        public virtual DbSet<SubscriptionType> SubscriptionTypes { get; set; }
+        public virtual DbSet<SubscriptionType> SubscriptionTypes { get; set; } 
         public virtual DbSet<Vehicle> Vehicles { get; set; }
-        public virtual DbSet<VehicleType> VehicleTypes { get; set; }
+        public virtual DbSet<VehicleModel> VehicleModels { get; set; }
         public virtual DbSet<Vendor> Vendors { get; set; }
         public virtual DbSet<VendorCompany> VendorCompanies { get; set; }
         public virtual DbSet<VendorCourse> VendorCourses { get; set; }
@@ -36,11 +36,11 @@ namespace MDS.Core
                 .IsUnicode(false);
 
             modelBuilder.Entity<AreaCover>()
-                .Property(e => e.Title)
+                .Property(e => e.AreaTitle)
                 .IsUnicode(false);
 
             modelBuilder.Entity<AreaCover>()
-                .Property(e => e.YourUrl)
+                .Property(e => e.AreaUrl)
                 .IsUnicode(false);
 
             modelBuilder.Entity<BankDetail>()
@@ -131,41 +131,22 @@ namespace MDS.Core
                 .Property(e => e.StateName)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<Vehicle>()
+               .Property(e => e.VehicleCompany)
+               .IsUnicode(false);
+
+            modelBuilder.Entity<VehicleModel>()
+              .Property(e => e.VehicleModelName)
+              .IsUnicode(false);
+
             modelBuilder.Entity<SubscriptionType>()
-                .Property(e => e.Title)
+                .Property(e => e.SubTitle)
                 .IsUnicode(false);
 
             modelBuilder.Entity<SubscriptionType>()
                 .Property(e => e.Description)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Vehicle>()
-                .Property(e => e.VehicleCompany)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Vehicle>()
-                .Property(e => e.VehicleModel)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Vehicle>()
-                .Property(e => e.VehicleTitle)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Vehicle>()
-                .Property(e => e.VehicleUrl)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<VehicleType>()
-                .Property(e => e.WhealsType)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<VehicleType>()
-                .Property(e => e.VehicleTypeTitle)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<VehicleType>()
-                .Property(e => e.VehicleTypeUrl)
-                .IsUnicode(false);
 
             modelBuilder.Entity<Vendor>()
                 .Property(e => e.FirstName)
@@ -196,21 +177,12 @@ namespace MDS.Core
                 .IsUnicode(false);
 
             modelBuilder.Entity<Vendor>()
-                .Property(e => e.DateofBirth)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Vendor>()
                 .HasMany(e => e.SubscriptionTypes)
                 .WithRequired(e => e.Vendor)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Vendor>()
-                .HasMany(e => e.VendorCompanies)
-                .WithRequired(e => e.Vendor)
-                .WillCascadeOnDelete(false);
-
             modelBuilder.Entity<VendorCompany>()
-                .Property(e => e.Name)
+                .Property(e => e.BranchName)
                 .IsUnicode(false);
 
             modelBuilder.Entity<VendorCompany>()
@@ -223,14 +195,6 @@ namespace MDS.Core
 
             modelBuilder.Entity<VendorCompany>()
                 .Property(e => e.Country)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<VendorCompany>()
-                .Property(e => e.State)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<VendorCompany>()
-                .Property(e => e.City)
                 .IsUnicode(false);
 
             modelBuilder.Entity<VendorCompany>()
@@ -266,16 +230,6 @@ namespace MDS.Core
                 .WithRequired(e => e.VendorCompany)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<VendorCompany>()
-                .HasMany(e => e.BankDetails)
-                .WithRequired(e => e.VendorCompany)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<VendorCompany>()
-                .HasMany(e => e.VendorCourses)
-                .WithRequired(e => e.VendorCompany)
-                .WillCascadeOnDelete(false);
-
             modelBuilder.Entity<VendorCourse>()
                 .Property(e => e.CourseTitle)
                 .IsUnicode(false);
@@ -301,21 +255,16 @@ namespace MDS.Core
                 .IsUnicode(false);
 
             modelBuilder.Entity<VendorCourse>()
-                .Property(e => e.YourUrl)
+                .Property(e => e.CourseUrl)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<VendorCourse>()
-                .HasMany(e => e.VehicleTypes)
-                .WithRequired(e => e.VendorCourse)
-                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<VendorImage>()
                 .Property(e => e.ImageName)
                 .IsUnicode(false);
 
             modelBuilder.Entity<VendorImage>()
-               .Property(e => e.ImageLocation)
-               .IsUnicode(false);
+                .Property(e => e.ImageLocation)
+                .IsUnicode(false);
         }
     }
 }

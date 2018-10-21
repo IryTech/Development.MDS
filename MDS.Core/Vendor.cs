@@ -40,9 +40,6 @@ namespace MDS.Core
         [StringLength(100)]
         public string Designation { get; set; }
 
-        [StringLength(30)]
-        public string DateofBirth { get; set; }
-
         public int? CreatedBy { get; set; }
 
         public DateTime? CreatedOn { get; set; }

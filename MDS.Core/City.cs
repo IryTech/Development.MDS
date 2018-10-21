@@ -9,14 +9,14 @@ namespace MDS.Core
     [Table("City")]
     public partial class City
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+       // [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CityId { get; set; }
 
         [StringLength(40)]
         public string CityName { get; set; }
 
-        public int? StateId { get; set; } 
+        public int? StateId { get; set; }
 
-        public virtual State State { get; set; }
+        public virtual State State {    get; set; }
     }
 }

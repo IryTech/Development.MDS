@@ -20,10 +20,10 @@ namespace MDS.Core
         public string PopularName { get; set; }
 
         [StringLength(100)]
-        public string Title { get; set; }
+        public string AreaTitle { get; set; }
 
         [StringLength(100)]
-        public string YourUrl { get; set; }
+        public string AreaUrl { get; set; }
 
         public int? CreatedBy { get; set; }
 

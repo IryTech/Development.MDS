@@ -14,7 +14,7 @@ namespace MDS.Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var areaCovers = from ac in db.AreaCovers join v in db.VendorCompanies on ac.VendorCompanyId equals v.VendorCompanyId select new AreaVendor { AreaCoverId = ac.AreaCoverId,BranchName=v.Name, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.Title, YourUrl = ac.YourUrl };
+            var areaCovers = from ac in db.AreaCovers join v in db.VendorCompanies on ac.VendorCompanyId equals v.VendorCompanyId select new AreaVendor { AreaCoverId = ac.AreaCoverId,BranchName=v.BranchName, AreaName=ac.AreaName, PopularName = ac.PopularName };
             return View(areaCovers.ToList());
             //var areaCovers = db.AreaCovers.Include(a => a.VendorCompany);
             //return View(areaCovers.ToList());
@@ -27,7 +27,7 @@ namespace MDS.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var areaCovers = (from ac in db.AreaCovers where ac.AreaCoverId == id select new AreaVendor { AreaCoverId = ac.AreaCoverId, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.Title, YourUrl = ac.YourUrl }).SingleOrDefault();
+            var areaCovers = (from ac in db.AreaCovers where ac.AreaCoverId == id select new AreaVendor { AreaCoverId = ac.AreaCoverId, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.AreaTitle, YourUrl = ac.AreaUrl }).SingleOrDefault();
             if (areaCovers == null)
             {
                 return HttpNotFound();
@@ -38,13 +38,13 @@ namespace MDS.Web.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name");
+            ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "BranchName", "VendorCompanyId");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "AreaCoverId,VendorCompanyId,AreaName,PopularName,Title,YourUrl")] AreaVendor areaVendor)
+        public ActionResult Create( AreaVendor areaVendor)
         {
            
             if (ModelState.IsValid)
@@ -56,12 +56,12 @@ namespace MDS.Web.Controllers
                     VendorCompanyId=areaVendor.VendorCompanyId,
                     AreaName = areaVendor.AreaName,
                     PopularName=areaVendor.PopularName,
-                    Title=areaVendor.Title,
-                    YourUrl=areaVendor.YourUrl
+                    AreaTitle=areaVendor.Title,
+                    AreaUrl=areaVendor.YourUrl
                 };
                 db.AreaCovers.Add(areaCover);
                 db.SaveChanges();
-                ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name", areaCover.VendorCompanyId);
+                ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "BranchName", areaCover.VendorCompanyId);
                 return RedirectToAction("Index");
             }
             return View(areaVendor);
@@ -74,7 +74,7 @@ namespace MDS.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var areaCovers = (from ac in db.AreaCovers where ac.AreaCoverId == id select new AreaVendor { AreaCoverId = ac.AreaCoverId, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.Title, YourUrl = ac.YourUrl }).SingleOrDefault();
+            var areaCovers = (from ac in db.AreaCovers where ac.AreaCoverId == id select new AreaVendor { AreaCoverId = ac.AreaCoverId, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.AreaTitle, YourUrl = ac.AreaUrl }).SingleOrDefault();
             if (areaCovers == null)
             {
                 return HttpNotFound();
@@ -90,8 +90,8 @@ namespace MDS.Web.Controllers
                 AreaCover areaCover = db.AreaCovers.Find(id);
                 areaCover.AreaName = areaVendor.AreaName;
                 areaCover.PopularName = areaVendor.PopularName;
-                areaCover.Title = areaVendor.Title;
-                areaCover.YourUrl = areaVendor.YourUrl;
+                areaCover.AreaTitle = areaVendor.Title;
+                areaCover.AreaUrl = areaVendor.YourUrl;
                 db.Entry(areaCover).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -106,7 +106,7 @@ namespace MDS.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var areaCovers = (from ac in db.AreaCovers where ac.AreaCoverId == id select new AreaVendor { AreaCoverId = ac.AreaCoverId,VendorCompanyId=ac.VendorCompanyId, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.Title, YourUrl = ac.YourUrl }).SingleOrDefault();
+            var areaCovers = (from ac in db.AreaCovers where ac.AreaCoverId == id select new AreaVendor { AreaCoverId = ac.AreaCoverId, AreaName = ac.AreaName, PopularName = ac.PopularName, Title = ac.AreaTitle, YourUrl = ac.AreaUrl }).SingleOrDefault();
             if (areaCovers == null)
             {
                 return HttpNotFound();

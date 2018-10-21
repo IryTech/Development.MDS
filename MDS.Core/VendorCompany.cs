@@ -20,10 +20,10 @@ namespace MDS.Core
 
         public int VendorCompanyId { get; set; }
 
-        public int VendorId { get; set; }
+        public int? VendorId { get; set; }
 
         [StringLength(100)]
-        public string Name { get; set; }
+        public string BranchName { get; set; }
 
         [StringLength(20)]
         public string Mobile { get; set; }
@@ -34,11 +34,9 @@ namespace MDS.Core
         [StringLength(50)]
         public string Country { get; set; }
 
-        [StringLength(50)]
-        public string State { get; set; }
+        public int? State { get; set; }
 
-        [StringLength(50)]
-        public string City { get; set; }
+        public int? City { get; set; }
 
         [StringLength(50)]
         public string Street { get; set; }
@@ -64,7 +62,7 @@ namespace MDS.Core
 
         public int? CreatedBy { get; set; }
 
-        public DateTime? CreatedOn { get; set; }
+        public DateTime? CreatOn { get; set; }
 
         public int? UpdatedBy { get; set; }
 

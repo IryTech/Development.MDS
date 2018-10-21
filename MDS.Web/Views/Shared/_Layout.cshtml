@@ -23,7 +23,21 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    @{if
+                             (Session["VendorId"] != null)
+                        {
+                            <li style="color:blue">Hello @Session["VendorName"]</li>
+                            <li>@Html.ActionLink("Logout", "VendorLogout", "LoginVendors")</li>
+                        }
+                        else
+                        {
+                                <li>
+                                    <span class="nav navbar-nav">@Html.ActionLink("Login", "LoginVendor", "LoginVendors")</span>
+                                </li>
+                        }
+                    }
                 </ul>
+
             </div>
         </div>
     </div>

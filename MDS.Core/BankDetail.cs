@@ -11,7 +11,7 @@ namespace MDS.Core
         [Key]
         public int BankDetailsId { get; set; }
 
-        public int VendorCompanyId { get; set; }
+        public int? VendorCompanyId { get; set; }
 
         [StringLength(30)]
         public string AccountHolderName { get; set; }

@@ -23,7 +23,7 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.BranchName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.VendorName)
@@ -32,10 +32,13 @@
             @Html.DisplayNameFor(model => model.Mobile)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.City)
+            @Html.DisplayNameFor(model => model.StateName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.AddressLine1)
+            @Html.DisplayNameFor(model => model.CityName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImageName)
         </th>
         <th>Actions</th>
     </tr>
@@ -50,33 +53,37 @@
     {
         foreach (var item in Model)
         {
-            <tr>
+        <tr>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.VendorName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Mobile)
-                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BranchName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VendorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mobile)
+            </td>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.City)
-                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StateName)
+            </td>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.AddressLine1)
-                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CityName)
+            </td>
 
-                <td>
-                    @Html.ActionLink("Add Branch", "Create", "BranchVendors", new { id = item.VendorCompanyId }) |
-                    @Html.ActionLink("Add Course", "Create", "VendorCourses") |
-                    @Html.ActionLink("Area Cover", "Create", "AreaCovers") |
-                    @Html.ActionLink("Add BankDetails", "Create", "BankDetails")
-                </td>
-            </tr>
+            <td>
+                <img src="~/ImageFolder/@item.ImageName"alt="Image not found" width="100" height="100" />
+            </td>
+
+            <td>
+                @Html.ActionLink("Add Branch", "Create", "BranchVendors", new { id = item.VendorCompanyId }) |
+                @Html.ActionLink("Add Course", "Create", "VendorCourses") |
+                @Html.ActionLink("Area Cover", "Create", "AreaCovers") |
+                @Html.ActionLink("Add BankDetails", "Create", "BankDetails")
+            </td>
+        </tr>
             <tr>
                 <td style=" border-top:none;" colspan="5">
                     @Html.ActionLink("Edit", "Edit", new { id = item.VendorCompanyId }) |

@@ -11,13 +11,13 @@ namespace MDS.Core
     {
         public int SubscriptionTypeId { get; set; }
 
-        public int VendorId { get; set; }
-
         [StringLength(50)]
-        public string Title { get; set; }
+        public string SubTitle { get; set; }
 
         [StringLength(50)]
         public string Description { get; set; }
+
+        public int VendorId { get; set; }
 
         public int? CreatedBy { get; set; }
 

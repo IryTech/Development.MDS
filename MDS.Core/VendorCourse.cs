@@ -12,14 +12,12 @@ namespace MDS.Core
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public VendorCourse()
         {
-            Vehicles = new HashSet<Vehicle>();
-            VehicleTypes = new HashSet<VehicleType>();
             VendorImages = new HashSet<VendorImage>();
         }
 
         public int VendorCourseId { get; set; }
 
-        public int VendorCompanyId { get; set; }
+        public int? VendorCompanyId { get; set; }
 
         [StringLength(50)]
         public string CourseTitle { get; set; }
@@ -34,11 +32,21 @@ namespace MDS.Core
 
         public decimal? VendorPrice { get; set; }
 
+        public int? Vehicle { get; set; }
+
+        public int? VehicleModel { get; set; }
+
+        [StringLength(100)]
+        public string VehicleTitle { get; set; }
+
+        [StringLength(100)]
+        public string VehicleUrl { get; set; }
+
         [StringLength(100)]
         public string Title { get; set; }
 
         [StringLength(100)]
-        public string YourUrl { get; set; }
+        public string CourseUrl { get; set; }
 
         public int? CreatedBy { get; set; }
 
@@ -47,12 +55,6 @@ namespace MDS.Core
         public int? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Vehicle> Vehicles { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<VehicleType> VehicleTypes { get; set; }
 
         public virtual VendorCompany VendorCompany { get; set; }
 

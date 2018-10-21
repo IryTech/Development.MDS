@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Data.Entity;
+using MDS.Core;
 
 namespace MDS.Web
 {
@@ -12,6 +14,7 @@ namespace MDS.Web
     {
         protected void Application_Start()
         {
+           // Database.SetInitializer<MdsDbContext>(new DropCreateDatabaseIfModelChanges<MdsDbContext>());
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

@@ -18,8 +18,9 @@ namespace MDS.Web.Controllers
         // GET: VendorCourses
         public ActionResult Index(string search)
         {
-            var vendorCourses = from vc in db.VendorCourses join vt in db.VehicleTypes on vc.VendorCourseId equals vt.VendorCourseId join v in db.Vehicles on vt.VendorCourseId equals v.VendorCourseId
-                                select new CourseVendor {VendorCourseId=vc.VendorCourseId, VendorCompanyId=vc.VendorCompanyId,WhealsType=vt.WhealsType,VehicleCompany=v.VehicleCompany,VehicleModel=v.VehicleModel,
+            var vendorCourses = from vc in db.VendorCourses join vm in db.VehicleModels on vc.VehicleModel equals vm.VehicleModelId join v in db.Vehicles on vc.Vehicle equals v.VehicleId
+                                join branch in db.VendorCompanies on vc.VendorCompanyId equals branch.VendorCompanyId
+                                select new CourseVendor {BranchName=branch.BranchName,VehicleCompany=v.VehicleCompany,ModelName=vm.VehicleModelName,
                                     CourseTitle = vc.CourseTitle,Duration=vc.Duration,VendorPrice=vc.VendorPrice};
             if (search == null)
             {
@@ -39,12 +40,13 @@ namespace MDS.Web.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var vendorCourses = (from vc in db.VendorCourses
-                                 join vt in db.VehicleTypes on vc.VendorCourseId equals vt.VendorCourseId
-                                 join v in db.Vehicles on vt.VendorCourseId equals v.VendorCourseId
-                                 where vc.VendorCourseId == id|| vt.VehicleTypesId==id || v.VehicleTypesId==id
+                                 join vm in db.VehicleModels on vc.VehicleModel equals vm.VehicleModelId
+                                 join v in db.Vehicles on vc.Vehicle equals v.VehicleId
+                                 join branch in db.VendorCompanies on vc.VendorCompanyId equals branch.VendorCompanyId
+                                 where vc.VendorCourseId == id
                                  select new CourseVendor
-                                 { VendorCourseId = vc.VendorCourseId , CourseTitle = vc.CourseTitle,WhealsType=vt.WhealsType,VehicleCompany=v.VehicleCompany,VehicleModel=v.VehicleModel,
-                                    VehicelTitle=v.VehicleTitle,VehicleUrl=v.VehicleUrl, Duration = vc.Duration, VendorPrice = vc.VendorPrice, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription, Title = vc.Title, YourUrl = vc.YourUrl }).SingleOrDefault();
+                                 { BranchName = branch.BranchName, VendorCourseId = vc.VendorCourseId , CourseTitle = vc.CourseTitle,VehicleCompany=v.VehicleCompany,ModelName=vm.VehicleModelName,
+                                    VehicelTitle=vc.VehicleTitle,VehicleUrl=vc.VehicleUrl, Duration = vc.Duration, VendorPrice = vc.VendorPrice, ShortDescription = vc.ShortDescription, LongDescription = vc.LongDescription, Title = vc.Title, CourseUrl = vc.CourseUrl }).SingleOrDefault();
             if (vendorCourses == null)
             {
                 return HttpNotFound();
@@ -55,8 +57,16 @@ namespace MDS.Web.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name");
+            ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "BranchName");
+            ViewBag.VehicleList = new SelectList(db.Vehicles, "VehicleId", "VehicleCompany");
             return View();
+        }
+        public JsonResult GetVehicleList(int VehicleId)
+
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            List<VehicleModel> vehicleModels = db.VehicleModels.Where(v => v.VehicleId == VehicleId).ToList();
+            return Json(vehicleModels, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -71,32 +81,22 @@ namespace MDS.Web.Controllers
                     CourseTitle = courseVendor.CourseTitle,
                     Duration = courseVendor.Duration,
                     VendorPrice=courseVendor.VendorPrice,
+                    Vehicle=courseVendor.VehicleId,
+                    VehicleModel=courseVendor.VehicleModelId,
                     ShortDescription=courseVendor.ShortDescription,
                     LongDescription=courseVendor.LongDescription,
                     Title=courseVendor.Title,
-                    YourUrl=courseVendor.YourUrl
+                    CourseUrl=courseVendor.CourseUrl,
+                    VehicleTitle = courseVendor.VehicelTitle,
+                    VehicleUrl = courseVendor.VehicleUrl,
+
                 };
                 db.VendorCourses.Add(vendorCourse);
-                VehicleType vehicleType = new VehicleType()
-                {
-                    VendorCourseId=courseVendor.VendorCourseId,
-                    WhealsType=courseVendor.WhealsType,
-                };
-                db.VehicleTypes.Add(vehicleType);
-                Vehicle vehicle = new Vehicle()
-                {
-                    VendorCourseId=courseVendor.VendorCourseId,
-                    VehicleCompany=courseVendor.VehicleCompany,
-                    VehicleModel=courseVendor.VehicleModel,
-                    VehicleTitle=courseVendor.VehicelTitle,
-                    VehicleUrl=courseVendor.VehicleUrl,
-                };
-                db.Vehicles.Add(vehicle);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-           // ViewBag.VendorCompanyId = new SelectList(db.VendorCompanies, "VendorCompanyId", "Name", vendorCourse.VendorCompanyId);
+            ViewBag.VehicleList = new SelectList(db.Vehicles, "VehicleId", "VehicleCompany");
             return View(courseVendor);
         }
 
@@ -108,24 +108,25 @@ namespace MDS.Web.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var vendorCourses = (from vc in db.VendorCourses
-                                 join v in db.Vehicles on vc.VendorCourseId equals v.VendorCourseId
-                                 join vt in db.VehicleTypes on v.VendorCourseId equals vt.VendorCourseId
-                                 where vc.VendorCourseId == id where v.VendorCourseId==id where vt.VendorCourseId==id
+                                 join vm in db.VehicleModels on vc.VehicleModel equals vm.VehicleModelId
+                                 join v in db.Vehicles on vc.Vehicle equals v.VehicleId
+                                 where vc.VendorCourseId == id
                                  select new CourseVendor
                                  {
+                                     VendorCourseId = vc.VendorCourseId,
                                      CourseTitle = vc.CourseTitle,
-                                     WhealsType = vt.WhealsType,
                                      VehicleCompany = v.VehicleCompany,
-                                     VehicleModel = v.VehicleModel,
-                                     VehicelTitle = v.VehicleTitle,
-                                     VehicleUrl = v.VehicleUrl,
+                                     ModelName = vm.VehicleModelName,
+                                     VehicelTitle = vc.VehicleTitle,
+                                     VehicleUrl = vc.VehicleUrl,
                                      Duration = vc.Duration,
                                      VendorPrice = vc.VendorPrice,
                                      ShortDescription = vc.ShortDescription,
                                      LongDescription = vc.LongDescription,
                                      Title = vc.Title,
-                                     YourUrl = vc.YourUrl
+                                     CourseUrl = vc.CourseUrl
                                  }).SingleOrDefault();
+
             if (vendorCourses == null)
             {
                 return HttpNotFound();
@@ -145,17 +146,9 @@ namespace MDS.Web.Controllers
                 vendorCourse.Duration = courseVendor.Duration;
                 vendorCourse.VendorPrice = courseVendor.VendorPrice;
                 vendorCourse.Title = courseVendor.Title;
-                vendorCourse.YourUrl = courseVendor.YourUrl;
+                vendorCourse.CourseUrl = courseVendor.CourseUrl;
                 db.Entry(vendorCourse).State = EntityState.Modified;
-                var vehicletype = db.VehicleTypes.FirstOrDefault(x => x.VendorCourseId == id);
-                vehicletype.WhealsType = courseVendor.WhealsType;
-                db.Entry(vehicletype).State = EntityState.Modified;
-                var vehicle= db.Vehicles.FirstOrDefault(x => x.VendorCourseId == id);
-                vehicle.VehicleCompany = courseVendor.VehicleCompany;
-                vehicle.VehicleModel = courseVendor.VehicleModel;
-                vehicle.VehicleTitle = courseVendor.CourseTitle;
-                vehicle.VehicleUrl = courseVendor.VehicleUrl;
-                db.Entry(vehicle).State = EntityState.Modified;
+                
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -170,24 +163,25 @@ namespace MDS.Web.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var vendorCourses = (from vc in db.VendorCourses
-                                 join vt in db.VehicleTypes on vc.VendorCourseId equals vt.VendorCourseId
-                                 join v in db.Vehicles on vt.VendorCourseId equals v.VendorCourseId
-                                 where vc.VendorCourseId==id where vt.VendorCourseId==id where  v.VendorCourseId==id
+                                 join vm in db.VehicleModels on vc.VehicleModel equals vm.VehicleModelId
+                                 join v in db.Vehicles on vc.Vehicle equals v.VehicleId
+                                 where vc.VendorCourseId == id
                                  select new CourseVendor
                                  {
+                                     VendorCourseId = vc.VendorCourseId,
                                      CourseTitle = vc.CourseTitle,
-                                     WhealsType = vt.WhealsType,
                                      VehicleCompany = v.VehicleCompany,
-                                     VehicleModel = v.VehicleModel,
-                                     VehicelTitle = v.VehicleTitle,
-                                     VehicleUrl = v.VehicleUrl,
+                                     ModelName = vm.VehicleModelName,
+                                     VehicelTitle = vc.VehicleTitle,
+                                     VehicleUrl = vc.VehicleUrl,
                                      Duration = vc.Duration,
                                      VendorPrice = vc.VendorPrice,
                                      ShortDescription = vc.ShortDescription,
                                      LongDescription = vc.LongDescription,
                                      Title = vc.Title,
-                                     YourUrl = vc.YourUrl
+                                     CourseUrl = vc.CourseUrl
                                  }).SingleOrDefault();
+
 
             if (vendorCourses == null)
             {
@@ -202,10 +196,6 @@ namespace MDS.Web.Controllers
            
             VendorCourse vendorCourse = db.VendorCourses.Find(id);           
             db.VendorCourses.Remove(vendorCourse);
-            var vehicle = db.Vehicles.FirstOrDefault(x => x.VendorCourseId == id);
-            db.Vehicles.Remove(vehicle);
-            var vehicletype = db.VehicleTypes.FirstOrDefault(x => x.VendorCourseId == id);
-            db.VehicleTypes.Remove(vehicletype);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

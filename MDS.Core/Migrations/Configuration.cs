@@ -10,6 +10,7 @@ namespace MDS.Core.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(MDS.Core.MdsDbContext context)
