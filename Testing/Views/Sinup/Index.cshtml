@@ -1,0 +1,113 @@
+﻿@model Testing.Models.Sinup
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4 style="align-content:center">Sin up</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.Mobile, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Mobile, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select id="state" name="state" ,new { class="control-label col-md-2" }>
+                    <option value="000">-Select State-</option>
+                </select>
+                @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select id="city" name="city" ,new { class="control-label col-md-2" }>
+                    <option value="000">-Select City-</option>
+                </select>
+                @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+    
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/BindData")
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+
+        var stateBind = function () {
+            var $state = $("#state");
+            $.each(myjson.states, function (i, state) {
+                $state.append('<option rel="' + i + '" value="' + i + '">' + state.state + '</option>');
+            });
+        }
+        $(document).on('ready', function () {
+            stateBind();
+            $("#state").on('change', function () {
+                var $city = $('#city');
+                var state = $(this).find('option:selected').text();
+                console.log(state);
+                var districtsArr = $.grep(myjson.states, function (states) { return states.state == state; })[0].districts;
+                $city.empty();
+                // $city.append('<option value="000">Choose</option>');//if you want to display choose oR not Required
+                $.each(districtsArr, function (i, city) {
+                    $city.append('<option rel="' + i + '" value="' + i + '">' + city + '</option>');
+                });
+            });
+
+            $(function () {
+                $("#datepicker").datepicker(
+                    {
+                        // minDate: new Date(1900, 1 - 1, 1), maxDate: '-18Y',
+                        dateFormat: 'dd/mm/yy',
+                        defaultDate: new Date(1970, 1 - 1),
+                        changeMonth: true,
+                        changeYear: true,
+                        yearRange: '-110:-18'
+                    });
+            });
+        });
+
+    </script>
+}
