@@ -17,6 +17,7 @@ namespace MDS.Web.Controllers
         // GET: BranchVendors
         public ActionResult Index(string search)
         {
+
             var branchVendor = (from vc in db.VendorCompanies  
                                 join v in db.Vendors on vc.VendorId equals v.VendorId join s in db.States on vc.State equals s.StateId
                                 join c in db.Cities on vc.City equals c.CityId
