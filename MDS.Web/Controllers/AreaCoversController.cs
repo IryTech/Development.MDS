@@ -12,7 +12,7 @@ namespace MDS.Web.Controllers
         private MdsDbContext db = new MdsDbContext();
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index() 
         {
             var areaCovers = from ac in db.AreaCovers join v in db.VendorCompanies on ac.VendorCompanyId equals v.VendorCompanyId select new AreaVendor { AreaCoverId = ac.AreaCoverId,BranchName=v.BranchName, AreaName=ac.AreaName, PopularName = ac.PopularName };
             return View(areaCovers.ToList());

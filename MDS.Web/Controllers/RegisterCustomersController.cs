@@ -16,7 +16,7 @@ namespace MDS.Web.Controllers
     {
         private MdsDbContext db = new MdsDbContext();
 
-        // GET: Customers
+        // GET: Customers 
         public ActionResult Index(string search)
         {
             var registerCustomers = from c in db.Customers select new RegisterCustomer { CustomerId = c.CustomerId, FirstName = c.FirstName, LastName = c.LastName, Email = c.Email, Mobile = c.Mobile};

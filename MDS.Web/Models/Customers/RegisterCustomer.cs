@@ -20,7 +20,7 @@ namespace MDS.Web.Models.Customers
         [Remote("CheckForDuplication", "RegisterCustomers")]
         [Display(Name = "Email")]
         public string Email { get; set; }
-
+         
         [Display(Name = "Mobile No:")]
         public string Mobile { get; set; }
 

@@ -40,7 +40,7 @@ namespace MDS.Web.Controllers
         public ActionResult Create() 
         {
             ViewBag.country = "India";
-            ViewBag.stateList = new SelectList(db.States, "StateId", "StateName");
+            ViewBag.stateList = new SelectList(db.States, "StateId", "StateName"); 
             return View();
         }
 

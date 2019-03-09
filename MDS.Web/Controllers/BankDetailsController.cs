@@ -12,7 +12,7 @@ using MDS.Web.Models.Vendors;
 namespace MDS.Web.Controllers
 {
     public class BankDetailsController : Controller
-    {
+    { 
         private MdsDbContext db = new MdsDbContext();
 
         // GET: BankDetails

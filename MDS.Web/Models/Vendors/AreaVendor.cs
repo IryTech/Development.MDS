@@ -24,7 +24,7 @@ namespace MDS.Web.Models.Vendors
         [Display(Name = "Searching Title")]
         public string Title { get; set; }
 
-        [Display(Name = "Searching Url")]
+        [Display(Name = "Searching Url")] 
         public string YourUrl { get; set; }
 
     }

@@ -12,7 +12,7 @@ using MDS.Web.Models.Vendors;
 namespace MDS.Web.Controllers
 {
     public class VendorCoursesController : Controller
-    {
+    { 
         private MdsDbContext db = new MdsDbContext();
       //  int vendorCompanyId = (int) System.Web.HttpContext.Current.Session["VendorCompanyId"];
         // GET: VendorCourses

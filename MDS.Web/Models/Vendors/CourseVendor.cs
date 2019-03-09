@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MDS.Web.Models.Vendors
 {
-    public class CourseVendor
+    public class CourseVendor 
     {
         public int VendorCourseId { get; set; }
 

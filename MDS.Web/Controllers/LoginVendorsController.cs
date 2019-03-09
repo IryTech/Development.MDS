@@ -16,7 +16,7 @@ namespace MDS.Web.Controllers
         { 
             return View();
         }
-        [HttpPost]
+        [HttpPost] 
         public ActionResult LoginVendor(Vendor login)
         {
             IQueryable<Vendor> vendors = from s in db.Vendors select s;

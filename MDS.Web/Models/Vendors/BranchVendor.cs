@@ -19,7 +19,7 @@ namespace MDS.Web.Models.Vendors
         [Required, Display(Name = "State")]
         public int StateId { get; set; }
 
-        [Required, Display(Name = "City")]
+        [Required, Display(Name = "City")] 
         public int CityId { get; set; }
 
         [Display(Name = "Branch Banner")]

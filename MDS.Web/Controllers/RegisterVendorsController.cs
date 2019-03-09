@@ -14,7 +14,7 @@ namespace MDS.Web.Controllers
     public class RegisterVendorsController : Controller
     {
         private MdsDbContext db = new MdsDbContext();
-         
+          
         // GET: Vendors
         public ActionResult Index(string search)
         {

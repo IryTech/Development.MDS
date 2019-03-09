@@ -23,5 +23,5 @@ namespace MDS.Web.Models.Vendors
 
         public string Password { get; set; }
 
-    }
+    } 
 }
