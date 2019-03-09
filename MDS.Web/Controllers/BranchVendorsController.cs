@@ -37,7 +37,7 @@ namespace MDS.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Create()
+        public ActionResult Create() 
         {
             ViewBag.country = "India";
             ViewBag.stateList = new SelectList(db.States, "StateId", "StateName");
